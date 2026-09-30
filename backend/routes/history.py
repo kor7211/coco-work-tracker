@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 from fastapi import APIRouter, Query
 import backend.database as database
-from datetime import datetime, timezone
 
 router = APIRouter(prefix="/api/history")
 
@@ -130,7 +129,8 @@ class HistoryCreate(BaseModel):
     title: str
     comment: str
     type_id: int
-    city: str
+    timezone: str
+    uploaded: str
     started: str
     duration_minutes: int
     break_minutes: int = 0
@@ -143,7 +143,7 @@ def create_history(history: HistoryCreate):
         INSERT INTO history 
         (
             type_id, 
-            city, 
+            timezone, 
             uploaded, 
             started, 
             duration_minutes, 
@@ -158,8 +158,8 @@ def create_history(history: HistoryCreate):
         query,
         (
             history.type_id,
-            history.city,
-            datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            history.timezone,
+            history.uploaded,
             history.started,
             history.duration_minutes,
             history.break_minutes,

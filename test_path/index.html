@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Coco-K">
+    <title data-i18n="title.recorder"></title>
+
+    <link rel="stylesheet" href="../assets/css/reset.css">
+    <link rel="stylesheet" href="../assets/css/variables.css">
+    <link rel="stylesheet" href="../assets/css/base.css">
+</head>
+
+<body>
+    <div class="wrapper hidden"></div>
+    <header>
+        <section class="logo-container">
+            <image src="../assets/images/logo64.jpg" alt="Logo"></image>
+            <h1 data-i18n="site.name"></h1>
+        </section>
+        <div class="language-selector">
+            <button class="language-button" type="button">
+                Lang
+                <span>⌄</span>
+            </button>
+
+            <div class="language-options">
+                <button type="button" data-lang="en">en</button>
+                <button type="button" data-lang="ja">jp</button>
+            </div>
+        </div>
+        <button class="navigation-button hamburger" type="button">
+            <span></span>
+        </button>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="../index.html" data-i18n="page.home"></a></li>
+            <li><a href="../universe/index.html" data-i18n="page.universe"></a></li>
+            <li><a href="#" data-i18n="page.recorder"></a></li>
+        </ul>
+    </nav>
+    <main>
+        <form id="recorder">
+            <section>
+                <h1 data-i18n="recorder.record"></h1>
+                <label for="work-type" data-i18n="recorder.type"></label> <br>
+                <select id="work-type" name="typeId"></select> <br>
+                <label for="title" data-i18n="recorder.title"></label> <br>
+                <input id="title" name="title" type="text"><br>
+                <label for="comment" data-i18n="recorder.comment"></label><br>
+                <input id="comment" name="comment" type="text"><br>
+                <label for="timezone" data-i18n="recorder.timezone"></label><br>
+                <select id="timezone" name="timezone"></select><br>
+                <label for="started-container" data-i18n="recorder.started"></label><br>
+                <span id="started-container">
+                    <input name="startedDate" type="date">
+                    <input name="startedTime" type="time">
+                </span><br>
+                <label for="duration-minutes" data-i18n="recorder.durationMinutes"></label><br>
+                <input id="duration-minutes" name="durationMinutes" type="time"><br>
+                <label for="break-minutes" data-i18n="recorder.breakMinutes"></label><br>
+                <input id="break-minutes" name="breakMinutes" type="time"><br>
+                <label for="images" data-i18n="recorder.image"></label><br>
+                <input id="images" name="images" type="file" accept="image/jpeg,image/png,image" multiple> <br>
+                <input type="submit">
+            </section>
+        </form>
+    </main>
+    <footer>
+        <section class="logo-container">
+            <image src="../assets/images/logo64.jpg" alt="Logo"></image>
+            <h1 data-i18n="site.name"></h1>
+        </section>
+        <p data-i18n="copyright"></p>
+        <ul>
+            <li><a href="../index.html" data-i18n="page.home"></a></li>
+            <li><a href="#" data-i18n="page.universe"></a></li>
+        </ul>
+    </footer>
+
+    <script type="module" src="../assets/js/recorder.js"></script>
+    <script src="../assets/js/language_setter.js"></script>
+    <script src="../assets/js/language_selector_controller.js"></script>
+</body>
+</html>

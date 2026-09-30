@@ -24,32 +24,33 @@ export async function getHistories(limit = 10, before = null, before_id = null) 
 }
 
 
-async function getHistory(id) {
+export async function getHistory(id) {
     return await _request(
         `http://localhost:8000/api/history/${id}`
     );
 }
 
 
-async function getTypes(limit = 10) {
+export async function getTypes(limit = 10) {
     return await _request(
         `http://localhost:8000/api/history/types?limit=${limit}`
     );
 }
 
 
-async function getType(id) {
+export async function getType(id) {
     return await _request(
         `http://localhost:8000/api/history/types/${id}`
     );
 }
 
 
-async function createHistory(
+export async function createHistory(
     title,
     comment,
     type_id,
-    city,
+    timezone,
+    uploaded,
     started,
     duration_minutes,
     break_minutes = 0,
@@ -65,7 +66,8 @@ async function createHistory(
                 title,
                 comment,
                 type_id,
-                city,
+                timezone,
+                uploaded,
                 started,
                 duration_minutes,
                 break_minutes
@@ -75,7 +77,7 @@ async function createHistory(
 }
 
 
-async function addImageToHistory(
+export async function addImageToHistory(
     history_id,
     path
 ) {
@@ -94,7 +96,7 @@ async function addImageToHistory(
 }
 
 
-async function createType(
+export async function createType(
     name,
     description
 ) {

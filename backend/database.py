@@ -21,7 +21,7 @@ def initialize_database():
     CREATE TABLE IF NOT EXISTS history (
         id INTEGER PRIMARY KEY,
         type_id INTEGER NOT NULL,
-        city TEXT NOT NULL,
+        timezone TEXT NOT NULL,
         started TEXT NOT NULL,
         duration_minutes INTEGER NOT NULL,
         break_minutes INTEGER NOT NULL DEFAULT 0,

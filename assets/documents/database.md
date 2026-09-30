@@ -5,7 +5,7 @@ erDiagram
     HISTORY {
         int id PK
         int typeId FK
-        text city "TitleCase eg.Tokyo, London"
+        text timezone "IANA Time Zone ID"
         text uploaded "YYYY-MM-DDTHH:MM:SSZ"
         text started "YYYY-MM-DDTHH:MM:SSZ"
         int durationMinutes

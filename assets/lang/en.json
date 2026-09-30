@@ -8,11 +8,24 @@
     },
     "title" : {
         "home": "Coco works tracking | Home",
-        "universe": "Coco works tracking | Universe"
+        "universe": "Coco works tracking | Universe",
+        "recorder": "Coco works tracking | Recorder"
     },
     "page" : {
         "home": "Home",
-        "universe": "Explore Universe"
+        "universe": "Explore Universe",
+        "recorder": "Make a Record"
+    },
+    "recorder": {
+        "record": "Work Record",
+        "title": "Title",
+        "comment": "Comment or Description",
+        "started": "When you started",
+        "durationMinutes": "How many minutes you did",
+        "breakMinutes": "How many minutes break was",
+        "timezone": "Which timezone you in",
+        "type": "What type this work is",
+        "image": "Related images"
     },
     "copyright": "© 2026 Coco-K"
 }
