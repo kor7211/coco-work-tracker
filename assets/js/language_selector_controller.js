@@ -21,7 +21,15 @@ if (!button) {
 const options = document.querySelectorAll("[data-lang]");
 
 button.addEventListener("click", () => {
-    selector.classList.toggle("open");
+    selector.classList.add("open");
+});
+
+selector.addEventListener("mouseenter", () => {
+    selector.classList.add("open");
+});
+
+selector.addEventListener("mouseleave", () => {
+    selector.classList.remove("open");
 });
 
 options.forEach(option => {

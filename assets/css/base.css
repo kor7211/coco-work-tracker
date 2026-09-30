@@ -4,15 +4,135 @@
     variables.css
    ========================= */
 
+/* == Header == */
 header {
-    color: var(--main-color-text);
-    background-color: var(--main-color);
+    color: var(--gray-midium);
+    background-color: var(--white);
     height: 100px;
     padding: 10px 20px;
 
     display: flex;
-    justify-content: space-between;
     align-items: center;
+}
+
+section.logo-container {
+    background-color: var(--main-color);
+    color: var(--main-color-text);
+    height: 80px;
+    padding: 10px 20px;
+    border-radius: 40px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.language-selector {
+    margin-left: auto;
+    position: relative;
+    display: inline-block;
+}
+
+.language-button {
+    border: none;
+    background: none;
+    color: var(--gray-midium);
+    cursor: pointer;
+    padding: 8px 12px;
+    width: 80px;
+
+    transition: var(--hover-transition);
+}
+
+.language-button:hover {
+    background: none;
+    color: var(--main-color);
+
+    transition: var(--hover-transition);
+}
+
+.language-options {
+    position: absolute;
+    top: 100%;
+    right: 0;
+
+    display: none;
+    width: 80px;
+
+    background: var(--white);
+    border: 1px solid var(--gray-light);
+    border-radius: 0px 0px 5px 5px;
+
+    transition: var(--hover-transition);
+}
+
+.language-selector.open .language-options {
+    display: flex;
+    flex-direction: column;
+
+    transition: var(--hover-transition);
+}
+
+.language-options button {
+    border: none;
+    background: none;
+    text-align: left;
+    padding: 8px 12px;
+    cursor: pointer;
+    color: var(--gray-midium);
+
+    transition: var(--hover-transition);
+}
+
+.language-options button:hover {
+    background: var(--gray-very-light);
+    color: var(--main-color);
+
+    transition: var(--hover-transition);
+}
+
+.hamburger {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+
+    display: grid;
+    place-items: center;
+}
+
+.hamburger span,
+.hamburger span::before,
+.hamburger span::after {
+    content: "";
+    display: block;
+
+    width: 24px;
+    height: 2px;
+    background: var(--gray-midium);
+
+    position: absolute;
+
+    transition: var(--hover-transition);
+}
+
+.hamburger:hover span,
+.hamburger:hover span::before,
+.hamburger:hover span::after {
+    background: var(--main-color);
+
+    transition: var(--hover-transition);
+}
+
+.hamburger span::before {
+    transform: translateY(-7px);
+}
+
+.hamburger span::after {
+    transform: translateY(7px);
 }
 
 main {
@@ -39,45 +159,4 @@ footer {
 
 .hidden {
     display: none;
-}
-
-section.logo-container {
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-}
-
-.hamburger {
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-
-    display: grid;
-    place-items: center;
-}
-
-.hamburger span,
-.hamburger span::before,
-.hamburger span::after {
-    content: "";
-    display: block;
-
-    width: 24px;
-    height: 2px;
-    background: var(--main-color-text);
-
-    position: absolute;
-}
-
-.hamburger span::before {
-    transform: translateY(-7px);
-}
-
-.hamburger span::after {
-    transform: translateY(7px);
 }

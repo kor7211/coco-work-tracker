@@ -4,6 +4,7 @@
 
 :root {
     --white: hsl(0, 0%, 100%); 
+    --gray-very-light: hsl(0, 0%, 90%);
     --gray-light: hsl(0, 0%, 75%);
     --gray-midium: hsl(0, 0%, 50%);
     --gray-dark: hsl(0, 0%, 25%);
@@ -14,6 +15,10 @@
     --main-color-shade: hsl(180, 47%, 28%);
     --main-color-text: var(--white);
 
-    --main-color-accent: hsl(355, 59%, 54%);
+    --main-color-accent: hsl(355, 59%, 56%);
+    --main-color-accent-hilight: hsl(355, 59%, 93%);
+    --main-color-accent-shade: hsl(355, 59%, 28%);
     --main-color-accent-text: var(--white);
+
+    --hover-transition: 0.5s;
 }
