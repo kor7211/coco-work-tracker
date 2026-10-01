@@ -26,8 +26,13 @@ form.addEventListener("submit", async (event) => {
 async function createWorkType() {
     const el = form.elements;
 
-    const name = el.name;
-    const description = el.description;
+    const name_el = el.name;
+    const description_el = el.description;
+    if (!name_el || !description_el) {
+        return;
+    }
+    const name = name_el.value.trim();
+    const description = description_el.value.trim();
 
     await createType(name, description);
     
@@ -41,7 +46,8 @@ async function updateList() {
     };
 
     try {
-        const types = getTypes(10);
+        const types = await getTypes(10);
+
         for (const type in types) {
             const p = document.createElement("p");
             p.innerText = `name: ${type.name} | ${type.description}`;
