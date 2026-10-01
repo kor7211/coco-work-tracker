@@ -48,7 +48,7 @@ async function updateList() {
     try {
         const types = await getTypes(10);
 
-        for (const type in types) {
+        for (const type of types) {
             const p = document.createElement("p");
             p.innerText = `name: ${type.name} | ${type.description}`;
 
