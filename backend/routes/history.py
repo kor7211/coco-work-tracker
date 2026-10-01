@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Query, HTTPException
 import backend.database as database
 
 router = APIRouter(prefix="/api/history")
@@ -87,7 +87,10 @@ def get_types(
 
     conn.close()
 
-    return result
+    if result is None:
+        raise HTTPException(status_code=404, detail="Work type not found") 
+
+    return dict(result)
 
 @router.get("/types/{type_id}")
 def get_type(type_id: int):
@@ -104,7 +107,10 @@ def get_type(type_id: int):
 
     conn.close()
 
-    return result
+    if result is None:
+        raise HTTPException(status_code=404, detail="Work type not found") 
+
+    return dict(result)
 
 @router.get("/{history_id}")
 def get_history(history_id: int):
@@ -119,11 +125,12 @@ def get_history(history_id: int):
     cursor = conn.execute(query, (history_id,))
     result = cursor.fetchone()
 
-    
-
     conn.close()
 
-    return result
+    if result is None:
+        raise HTTPException(status_code=404, detail="Work type not found") 
+
+    return dict(result)
 
 class HistoryCreate(BaseModel):
     title: str
