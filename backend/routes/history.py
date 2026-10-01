@@ -87,10 +87,7 @@ def get_types(
 
     conn.close()
 
-    if result is None:
-        raise HTTPException(status_code=404, detail="Work type not found") 
-
-    return dict(result)
+    return [dict(row) for row in result]
 
 @router.get("/types/{type_id}")
 def get_type(type_id: int):
