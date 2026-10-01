@@ -17,7 +17,7 @@
         "recorder": "Make a Record"
     },
     "recorder": {
-        "record": "Work Record",
+        "record": "Create Work Record",
         "title": "Title",
         "comment": "Comment or Description",
         "started": "When you started",
@@ -26,6 +26,11 @@
         "timezone": "Which timezone you in",
         "type": "What type this work is",
         "image": "Related images"
+    },
+    "workTypeCreater": {
+        "workType": "Create Type",
+        "name": "Name",
+        "description": "Description"
     },
     "copyright": "© 2026 Coco-K"
 }

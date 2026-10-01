@@ -41,6 +41,18 @@
         </ul>
     </nav>
     <main>
+        <form id="work-type-creater">
+            <section>
+                <h1 data-i18n="workTypeCreater.workType"></h1>
+                <label for="type-name" data-i18n="workTypeCreater.name"></label> <br>
+                <input id="type-name" name="name" type="text"> <br>
+                <label for="type-description" data-i18n="workTypeCreater.description"></label> <br>
+                <input id="type-description" name="description" type="text"> <br>
+                <input type="submit">
+            </section>
+            <div id="work-type-list"></div>
+        </form>
+
         <form id="recorder">
             <section>
                 <h1 data-i18n="recorder.record"></h1>
@@ -79,6 +91,7 @@
         </ul>
     </footer>
 
+    <script type="module" src="../assets/js/work_type_creater.js"></script>
     <script type="module" src="../assets/js/recorder.js"></script>
     <script src="../assets/js/language_setter.js"></script>
     <script src="../assets/js/language_selector_controller.js"></script>

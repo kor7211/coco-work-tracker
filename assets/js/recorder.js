@@ -17,7 +17,7 @@
  *      <input type="submit">
  */
 
-import { getTypes, createType, createHistory } from "./api_history.js";
+import { getTypes, createHistory } from "./api_history.js";
 
 const form = document.querySelector("form#recorder");
 
