@@ -3,3 +3,8 @@
 python -m uvicorn src.main:app --reload
 """
 This database accept connection from live-server.
+
+"""
+ctrl + c
+"""
+to exit.
