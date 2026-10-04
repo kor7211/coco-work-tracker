@@ -20,7 +20,7 @@ async function loadMore() {
     try {
         const data = await getHistories(LIMIT, before, before_id);
 
-        for (const history of data.items) {
+        for (const history of data) {
             container.append(createHistoryElement(history));
             before = history.started;
             before_id = history.id;
@@ -42,7 +42,7 @@ function createHistoryElement(history) {
     if (!template) {
         throw new Error("Necessary DOMElement not fond: #history-template");
     }
-    const clone = template.cloneNode(true);
+    const clone = template.content.cloneNode(true);
 
     clone.querySelector(".title").textContent = history.title;
     clone.querySelector(".comment").textContent = history.comment;

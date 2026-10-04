@@ -47,7 +47,7 @@ def get_histories(
 
         query = f"""
             SELECT history_id, path
-            FROM images
+            FROM image
             WHERE history_id IN ({placeholders})
             ORDER BY id
         """
