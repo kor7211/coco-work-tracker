@@ -1,28 +1,52 @@
 ```mermaid
 erDiagram
-    HISTORY }|--|| WORK-TYPE : describe
+    HISTORY }|--|| WORK-TYPES : describe
     HISTORY ||--o{ IMAGE : contains
+    HISTORY ||--|| TITLE : translate
+    HISTORY ||--|| COMMENT : translate
     HISTORY {
         int id PK
-        int typeId FK
+        int type_id FK
         text timezone "IANA Time Zone ID"
         text uploaded "YYYY-MM-DDTHH:MM:SSZ"
         text started "YYYY-MM-DDTHH:MM:SSZ"
-        int durationMinutes
-        int breakMinutes
-        text title
-        text comment
+        int duration_minutes
+        int break_minutes
+    }
+
+    TITLE {
+        int history_id FK
+        text en
+        text ja
+    }
+
+    COMMENT {
+        int history_id FK
+        text en
+        text ja
     }
 
     IMAGE {
         int id PK
-        int historyId FK
+        int history_id FK
         text path
     }
     
-    WORK-TYPE {
+    WORK-TYPES ||--|| WORK-TYPE-NAME: translate
+    WORK-TYPES ||--|| WORK-TYPE-DESCRIPTION: translate
+    WORK-TYPES {
         int id PK
-        text name
-        text description
+    }
+
+    WORK-TYPE-NAME {
+        int type_id FK
+        text en
+        text ja
+    }
+
+    WORK-TYPE-DESCRIPTION {
+        int type_id FK
+        text en
+        text ja
     }
 ```
