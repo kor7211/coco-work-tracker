@@ -1,10 +1,15 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from fastapi import APIRouter, Query, HTTPException
 import backend.database as database
 
 router = APIRouter(prefix="/api/history")
 
 
+'''
+==========================
+Functions for GET methods
+==========================
+'''
 @router.get("/")
 def get_histories(
     limit: int = Query(default=10, ge=1, le=100),
@@ -13,97 +18,98 @@ def get_histories(
 ):
     conn = database.get_connection()
 
-    if before is None:
-        query = """
-            SELECT *
-            FROM history
-            ORDER BY started DESC, id DESC
-            LIMIT ?
-        """
-
-        histories = conn.execute(query, (limit,)).fetchall()
-
-    else:
-        query = """
-            SELECT *
-            FROM history
-            WHERE started < ?
-               OR (started = ? AND id < ?)
-            ORDER BY started DESC, id DESC
-            LIMIT ?
-        """
-
-        histories = conn.execute(
-            query,
-            (before, before, before_id, limit)
-        ).fetchall()
-
-    history_ids = [history["id"] for history in histories]
-
-    images = {}
-    titles = {}
-    comments = {}
-
-    if history_ids:
-        placeholders = ",".join("?" for _ in history_ids)
-        # Process images
-        query = f"""
-            SELECT history_id, path
-            FROM image
-            WHERE history_id IN ({placeholders})
-            ORDER BY id
-        """
-
-        rows = conn.execute(query, history_ids).fetchall()
-
-        for row in rows:
-            images.setdefault(row["history_id"], []).append(
-                row["path"]
-            )
-
-        # Process titles 
-        query = f"""
-            SELECT history_id, en, ja
-            FROM title
-            WHERE history_id IN ({placeholders})
-            ORDER BY history_id
-        """
-
-        rows = conn.execute(query, history_ids).fetchall()
-
-        for row in rows:
-            titles[row["history_id"]] = {
-                "ja": row["ja"],
-                "en": row["en"]
+    try:
+        if before is None:
+            query = """
+                SELECT *
+                FROM history
+                ORDER BY started DESC, id DESC
+                LIMIT ?
+            """
+    
+            histories = conn.execute(query, (limit,)).fetchall()
+    
+        else:
+            query = """
+                SELECT *
+                FROM history
+                WHERE started < ?
+                    OR (started = ? AND id < ?)
+                ORDER BY started DESC, id DESC
+                LIMIT ?
+            """
+    
+            histories = conn.execute(
+                query,
+                (before, before, before_id, limit)
+            ).fetchall()
+    
+        history_ids = [history["id"] for history in histories]
+    
+        images = {}
+        titles = {}
+        comments = {}
+    
+        if history_ids:
+            placeholders = ",".join("?" for _ in history_ids)
+            # Process images
+            query = f"""
+                SELECT history_id, path
+                FROM image
+                WHERE history_id IN ({placeholders})
+                ORDER BY id
+            """
+    
+            rows = conn.execute(query, history_ids).fetchall()
+    
+            for row in rows:
+                images.setdefault(row["history_id"], []).append(
+                    row["path"]
+                )
+    
+            # Process titles 
+            query = f"""
+                SELECT history_id, en, ja
+                FROM title
+                WHERE history_id IN ({placeholders})
+                ORDER BY history_id
+            """
+    
+            rows = conn.execute(query, history_ids).fetchall()
+    
+            for row in rows:
+                titles[row["history_id"]] = {
+                    "ja": row["ja"],
+                    "en": row["en"]
+                }
+    
+            # Process comment 
+            query = f"""
+                SELECT history_id, en, ja
+                FROM comment
+                WHERE history_id IN ({placeholders})
+                ORDER BY history_id
+            """
+    
+            rows = conn.execute(query, history_ids).fetchall()
+    
+            for row in rows:
+                comments[row["history_id"]] = {
+                    "ja": row["ja"],
+                    "en": row["en"]
+                }
+    
+        return [
+            {
+                **dict(history),
+                "images": images.get(history["id"], []),
+                "title": titles.get(history["id"], {"ja": "", "en": ""}),
+                "comment": comments.get(history["id"], {"ja": "", "en": ""})
             }
-
-        # Process comment 
-        query = f"""
-            SELECT history_id, en, ja
-            FROM comment
-            WHERE history_id IN ({placeholders})
-            ORDER BY history_id
-        """
-
-        rows = conn.execute(query, history_ids).fetchall()
-
-        for row in rows:
-            comments[row["history_id"]] = {
-                "ja": row["ja"],
-                "en": row["en"]
-            }
-
-    conn.close()
-
-    return [
-        {
-            **dict(history),
-            "images": images.get(history["id"], []),
-            "title": titles.get(history["id"], {"ja": "", "en": ""}),
-            "comment": comments.get(history["id"], {"ja": "", "en": ""})
-        }
-        for history in histories
-    ]
+            for history in histories
+        ]
+    finally:
+        conn.close()
 
 @router.get("/types")
 def get_types(
@@ -111,62 +117,47 @@ def get_types(
 ):
     conn = database.get_connection()
 
-    query = """
-        SELECT *
-        FROM work_types
-        ORDER BY id DESC
-        LIMIT ?
-    """
-
-    cursor = conn.execute(query, (limit,))
-    result = cursor.fetchall()
-
-    conn.close()
-
-    return [dict(row) for row in result]
+    try:
+        query = """
+            SELECT *
+            FROM work_types
+            ORDER BY id DESC
+            LIMIT ?
+        """
+    
+        cursor = conn.execute(query, (limit,))
+        result = cursor.fetchall()
+    
+        return [dict(row) for row in result]
+    finally:
+        conn.close()    
 
 @router.get("/types/{type_id}")
 def get_type(type_id: int):
     conn = database.get_connection()
 
-    query = """
-        SELECT *
-        FROM work_types
-        WHERE id = ?
-    """
+    try:
+        query = """
+            SELECT *
+            FROM work_types
+            WHERE id = ?
+        """
 
-    cursor = conn.execute(query, (type_id,))
-    result = cursor.fetchone()
+        cursor = conn.execute(query, (type_id,))
+        result = cursor.fetchone()
 
-    conn.close()
+        if result is None:
+            raise HTTPException(status_code=404, detail="Work type not found") 
 
-    if result is None:
-        raise HTTPException(status_code=404, detail="Work type not found") 
+        return dict(result)
+    finally:
+        conn.close()
 
-    return dict(result)
-
-# @router.get("/{history_id}")
-# def get_history(history_id: int):
-#     conn = database.get_connection()
-
-#     query = """
-#         SELECT *
-#         FROM history
-#         WHERE id = ?
-#     """
-
-#     cursor = conn.execute(query, (history_id,))
-#     result = cursor.fetchone()
-
-#     conn.close()
-
-#     if result is None:
-#         raise HTTPException(status_code=404, detail="Work type not found") 
-
-#     return dict(result)
-
-from pydantic import BaseModel, Field
-
+'''
+==========================
+Functions for POST methods
+==========================
+'''
 
 class HistoryCreate(BaseModel):
     title_en: str
@@ -260,36 +251,6 @@ def create_history(history: HistoryCreate):
 
     finally:
         conn.close()
-
-# class ImageCreate(BaseModel):
-#      path : str
-
-# @router.post("/{history_id}/images")
-# def add_image_to_history(
-#     history_id : int,
-#     image : ImageCreate
-# ):
-#     conn = database.get_connection()
-
-#     query = """
-#         INSERT INTO image 
-#         (history_id, path)
-#         VALUES (?, ?)
-#     """
-
-#     cursor = conn.execute(
-#         query,
-#         (
-#             history_id,
-#             image.path
-#         )
-#     )
-#     image_id = cursor.lastrowid
-    
-#     conn.commit()
-#     conn.close()
-
-#     return {"id":image_id}
 
 class TypeCreate(BaseModel):
     name_en : str
