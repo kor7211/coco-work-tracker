@@ -113,24 +113,73 @@ def get_histories(
 
 @router.get("/types")
 def get_types(
-    limit : int = Query(default=10, ge=1, le=100)
+    limit: int = Query(default=10, ge=1, le=100)
 ):
     conn = database.get_connection()
 
     try:
         query = """
-            SELECT *
+            SELECT id
             FROM work_types
             ORDER BY id DESC
             LIMIT ?
         """
-    
-        cursor = conn.execute(query, (limit,))
-        result = cursor.fetchall()
-    
-        return [dict(row) for row in result]
+
+        types = conn.execute(query, (limit,)).fetchall()
+
+        type_ids = [row["id"] for row in types]
+
+        names = {}
+        descriptions = {}
+
+        if type_ids:
+            placeholders = ",".join("?" for _ in type_ids)
+
+            query = f"""
+                SELECT type_id, en, ja
+                FROM work_type_name
+                WHERE type_id IN ({placeholders})
+            """
+
+            rows = conn.execute(query, type_ids).fetchall()
+
+            for row in rows:
+                names[row["type_id"]] = {
+                    "en": row["en"],
+                    "ja": row["ja"]
+                }
+
+            query = f"""
+                SELECT type_id, en, ja
+                FROM work_type_description
+                WHERE type_id IN ({placeholders})
+            """
+
+            rows = conn.execute(query, type_ids).fetchall()
+
+            for row in rows:
+                descriptions[row["type_id"]] = {
+                    "en": row["en"],
+                    "ja": row["ja"]
+                }
+
+        return [
+            {
+                "id": work_type["id"],
+                "name": names.get(
+                    work_type["id"],
+                    {"en": "", "ja": ""}
+                ),
+                "description": descriptions.get(
+                    work_type["id"],
+                    {"en": "", "ja": ""}
+                )
+            }
+            for work_type in types
+        ]
+
     finally:
-        conn.close()    
+        conn.close()  
 
 @router.get("/types/{type_id}")
 def get_type(type_id: int):
@@ -138,18 +187,56 @@ def get_type(type_id: int):
 
     try:
         query = """
-            SELECT *
+            SELECT id
             FROM work_types
             WHERE id = ?
         """
 
-        cursor = conn.execute(query, (type_id,))
-        result = cursor.fetchone()
+        work_type = conn.execute(
+            query,
+            (type_id,)
+        ).fetchone()
 
-        if result is None:
-            raise HTTPException(status_code=404, detail="Work type not found") 
+        if work_type is None:
+            raise HTTPException(
+                status_code=404,
+                detail="Work type not found"
+            )
 
-        return dict(result)
+        query = """
+            SELECT en, ja
+            FROM work_type_name
+            WHERE type_id = ?
+        """
+
+        name = conn.execute(
+            query,
+            (type_id,)
+        ).fetchone()
+
+        query = """
+            SELECT en, ja
+            FROM work_type_description
+            WHERE type_id = ?
+        """
+
+        description = conn.execute(
+            query,
+            (type_id,)
+        ).fetchone()
+
+        return {
+            "id": work_type["id"],
+            "name": {
+                "en": name["en"] if name else "",
+                "ja": name["ja"] if name else ""
+            },
+            "description": {
+                "en": description["en"] if description else "",
+                "ja": description["ja"] if description else ""
+            }
+        }
+
     finally:
         conn.close()
 
