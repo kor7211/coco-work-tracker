@@ -4,8 +4,10 @@
  * 
  * Required elememts:
  *  <form> with id="work-type-creater". Inside of this, elements below needed.
- *      <input> with name="name"
- *      <input> with name="description"
+ *      <input> with name="nameEn"
+ *      <input> with name="descriptionEn"
+ *      <input> with name="nameJa"
+ *      <input> with name="descriptionJa"
  *  <div> with id="work-type-list"
  */
 
@@ -26,15 +28,24 @@ form.addEventListener("submit", async (event) => {
 async function createWorkType() {
     const el = form.elements;
 
-    const name_el = el.name;
-    const description_el = el.description;
-    if (!name_el || !description_el) {
+    const name_en_el = el.nameEn;
+    const description_en_el = el.descriptionEn;
+    const name_ja_el = el.nameJa;
+    const description_ja_el = el.descriptionja;
+    if (!name_en_el || !description_en_el || !name_ja_el || !description_ja_el) {
         return;
     }
-    const name = name_el.value.trim();
-    const description = description_el.value.trim();
+    const name_en = name_en_el.value.trim();
+    const description_en = description_en_el.value.trim();
+    const name_ja = name_ja_el.value.trim();
+    const description_ja = description_ja_el.value.trim();
 
-    await createType(name, description);
+    await createType(
+        name_en,
+        name_ja,
+        description_en,
+        description_ja
+    );
     
     updateList();
 }
@@ -49,14 +60,38 @@ async function updateList() {
         const types = await getTypes(10);
 
         for (const type of types) {
-            const p = document.createElement("p");
-            p.innerText = `name: ${type.name} | ${type.description}`;
+            const span = document.createElement("span");
+            const name = document.createElement("p");
+            const description = document.createElement("p");
+            
+            type.name.forEach(([key, value]) => {
+                name.dataset[`lang${titleCase(key)}`] = value;
+            });
 
-            list.append(p);
+            type.descriptions.forEach(([key, value]) => {
+                description.dataset[`lang${titleCase(key)}`] = value;
+            });
+
+            span.append(name, description);
+
+            list.append(span);
         }
     } catch (exception) {
         console.error(exception);
     }
+}
+
+/**
+ * Return title case of given string.
+ * Title Case -> Begin with upper case and others are lower case. 
+ * @param {string} s 
+ * @returns {string}
+ */
+function titleCase(s) {
+    return s.toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
 }
 
 // Initialize

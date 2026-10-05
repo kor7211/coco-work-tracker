@@ -11,7 +11,10 @@ async function _request(url, options = {}) {
 }
 
 
-export async function getHistories(limit = 10, before = null, before_id = null) {
+export async function getHistories(
+    limit = 10, 
+    before = null, 
+    before_id = null) {
     if (before == null) {
         return await _request(
             `http://localhost:8000/api/history?limit=${limit}`
@@ -21,13 +24,6 @@ export async function getHistories(limit = 10, before = null, before_id = null) 
             `http://localhost:8000/api/history?limit=${limit}&before=${before}&before_id=${before_id}`
         );
     }
-}
-
-
-export async function getHistory(id) {
-    return await _request(
-        `http://localhost:8000/api/history/${id}`
-    );
 }
 
 
@@ -46,14 +42,17 @@ export async function getType(id) {
 
 
 export async function createHistory(
-    title,
-    comment,
+    title_en,
+    title_ja,
+    comment_en,
+    comment_ja,
     type_id,
     timezone,
     uploaded,
     started,
     duration_minutes,
-    break_minutes = 0,
+    break_minutes,
+    images = []
 ) {
     return await _request(
         "http://localhost:8000/api/history",
@@ -63,33 +62,17 @@ export async function createHistory(
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                title,
-                comment,
+                title_en,
+                title_ja,
+                comment_en,
+                comment_ja,
                 type_id,
                 timezone,
                 uploaded,
                 started,
                 duration_minutes,
-                break_minutes
-            })
-        }
-    );
-}
-
-
-export async function addImageToHistory(
-    history_id,
-    path
-) {
-    return await _request(
-        `http://localhost:8000/api/history/${history_id}/images`,
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                path
+                break_minutes,
+                images
             })
         }
     );
@@ -97,8 +80,10 @@ export async function addImageToHistory(
 
 
 export async function createType(
-    name,
-    description
+    name_en,
+    name_ja,
+    description_en,
+    description_ja
 ) {
     return await _request(
         "http://localhost:8000/api/history/types",
@@ -108,11 +93,11 @@ export async function createType(
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                name,
-                description
+                name_en,
+                name_ja,
+                description_en,
+                description_ja
             })
         }
     );
 }
-
-
