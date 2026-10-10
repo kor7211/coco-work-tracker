@@ -2,6 +2,10 @@
     "site" : {
         "name": "CocoWorkTracker"
     },
+    "language": {
+        "en": "English",
+        "ja": "Japanese"
+    },
     "author" : {
         "name" : "Coco-K",
         "git" : ""

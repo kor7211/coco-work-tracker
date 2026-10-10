@@ -12,6 +12,8 @@
  */
 
 import { getTypes, createType } from "./api_history.js";
+import { getCurrentLangage } from "./language_setter.js";
+import { titleCase } from "./case_formatter.js";
 
 const form = document.querySelector("form#work-type-creater");
 
@@ -24,17 +26,13 @@ form.addEventListener("submit", async (event) => {
     await createWorkType();
 })
 
-
 async function createWorkType() {
     const el = form.elements;
 
     const name_en_el = el.nameEn;
     const description_en_el = el.descriptionEn;
     const name_ja_el = el.nameJa;
-    const description_ja_el = el.descriptionja;
-    if (!name_en_el || !description_en_el || !name_ja_el || !description_ja_el) {
-        return;
-    }
+    const description_ja_el = el.descriptionJa;
     const name_en = name_en_el.value.trim();
     const description_en = description_en_el.value.trim();
     const name_ja = name_ja_el.value.trim();
@@ -63,14 +61,22 @@ async function updateList() {
             const span = document.createElement("span");
             const name = document.createElement("p");
             const description = document.createElement("p");
-            
-            type.name.forEach(([key, value]) => {
-                name.dataset[`lang${titleCase(key)}`] = value;
-            });
 
-            type.descriptions.forEach(([key, value]) => {
+            console.log(type.name);
+            
+            for (const [key, value] of Object.entries(type.name)) {
+                name.dataset[`lang${titleCase(key)}`] = value;
+                if (key == getCurrentLangage()) {
+                    name.textContent = value;
+                }
+            };
+
+            for (const [key, value] of Object.entries(type.description)) {
                 description.dataset[`lang${titleCase(key)}`] = value;
-            });
+                if (key == getCurrentLangage()) {
+                    name.textContent = value;
+                }
+            };
 
             span.append(name, description);
 
@@ -82,17 +88,10 @@ async function updateList() {
 }
 
 /**
- * Return title case of given string.
- * Title Case -> Begin with upper case and others are lower case. 
- * @param {string} s 
- * @returns {string}
+ * Run at first load.
  */
-function titleCase(s) {
-    return s.toLowerCase()
-        .split(' ')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ');
+function main() {
+    updateList();
 }
 
-// Initialize
-updateList();
+main()

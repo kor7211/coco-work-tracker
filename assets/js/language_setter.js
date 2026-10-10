@@ -1,17 +1,25 @@
-/*
+/**
  * This JavaScript file controls site languages.
  */
+import { titleCase } from "./case_formatter.js";
 
+//Error related to language settings.
+class LanguageError extends Error{
+    constructor(message) {
+        super(message);
+    }
+}
+
+// Dictionary of path for language json files.
 const translations = {
     ja: "../lang/ja.json",
     en: "../lang/en.json"
 };
 
-class LanguageError extends Error{
-    constructor(message) {
-        super(message);
-    }
-
+// Current language. Default "en".
+let currentLang = "en";
+export function getCurrentLangage() {
+    return currentLang;
 }
 
 /**
@@ -56,7 +64,20 @@ async function setLanguage(lang) {
         element.textContent = value;
     }
 
+    // Set instance elements language
+    const key = `[data-lang-${lang}]`;
+    const elememts = document.querySelectorAll(key);
+
+    for (const el of elememts) {
+        const content = el.dataset[`lang${titleCase(lang)}`];
+        if (content) {
+            el.textContent = content;
+        }
+    }
+
     localStorage.setItem("language",lang);
+
+    currentLang = lang;
 
     console.log("set language: " + lang);
 }

@@ -44,10 +44,16 @@
         <form id="work-type-creater">
             <section>
                 <h1 data-i18n="workTypeCreater.workType"></h1>
-                <label for="type-name" data-i18n="workTypeCreater.name"></label> <br>
-                <input id="type-name" name="name" type="text"> <br>
-                <label for="type-description" data-i18n="workTypeCreater.description"></label> <br>
-                <input id="type-description" name="description" type="text"> <br>
+                <p data-i18n="language.en"></p>
+                <label for="type-name-en" data-i18n="workTypeCreater.name"></label> <br>
+                <input id="type-name-en" name="nameEn" type="text"> <br>
+                <label for="type-description-en" data-i18n="workTypeCreater.description"></label> <br>
+                <input id="type-description-en" name="descriptionEn" type="text"> <br>
+                <p data-i18n="language.ja"></p>
+                <label for="type-name-ja" data-i18n="workTypeCreater.name"></label> <br>
+                <input id="type-name-ja" name="nameJa" type="text"> <br>
+                <label for="type-description-ja" data-i18n="workTypeCreater.description"></label> <br>
+                <input id="type-description-ja" name="descriptionJa" type="text"> <br>
                 <input type="submit">
             </section>
             <div id="work-type-list"></div>
@@ -58,10 +64,16 @@
                 <h1 data-i18n="recorder.record"></h1>
                 <label for="work-type" data-i18n="recorder.type"></label> <br>
                 <select id="work-type" name="typeId"></select> <br>
-                <label for="title" data-i18n="recorder.title"></label> <br>
-                <input id="title" name="title" type="text"><br>
-                <label for="comment" data-i18n="recorder.comment"></label><br>
-                <input id="comment" name="comment" type="text"><br>
+                <p data-i18n="language.en"></p>
+                <label for="title-en" data-i18n="recorder.title"></label> <br>
+                <input id="title-en" name="titleEn" type="text"><br>
+                <label for="comment-en" data-i18n="recorder.comment"></label><br>
+                <input id="comment-en" name="commentEn" type="text"><br>
+                <p data-i18n="language.ja"></p>
+                <label for="title-ja" data-i18n="recorder.title"></label> <br>
+                <input id="title-ja" name="titleJa" type="text"><br>
+                <label for="comment-ja" data-i18n="recorder.comment"></label><br>
+                <input id="comment-ja" name="commentJa" type="text"><br>
                 <label for="timezone" data-i18n="recorder.timezone"></label><br>
                 <select id="timezone" name="timezone"></select><br>
                 <label for="started-container" data-i18n="recorder.started"></label><br>
@@ -91,9 +103,9 @@
         </ul>
     </footer>
 
+    <script type="module" src="../assets/js/language_setter.js"></script>
+    <script src="../assets/js/language_selector_controller.js"></script>
     <script type="module" src="../assets/js/work_type_creater.js"></script>
     <script type="module" src="../assets/js/recorder.js"></script>
-    <script src="../assets/js/language_setter.js"></script>
-    <script src="../assets/js/language_selector_controller.js"></script>
 </body>
 </html>

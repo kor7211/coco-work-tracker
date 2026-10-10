@@ -4,8 +4,10 @@
  * 
  * Required elememts:
  *  <form> with id="recorder". Inside of this, elements below needed.
- *      <input> with name="title"
- *      <input> with name="comment"
+ *      <input> with name="titleEn"
+ *      <input> with name="titleJa"
+ *      <input> with name="commentEn"
+ *      <input> with name="commentJa"
  *      <select> with name="timezone", id="timezone"
  *      <input> with name="startedDate"
  *      <input> with name="startedTime"
@@ -18,6 +20,7 @@
  */
 
 import { getTypes, createHistory } from "./api_history.js";
+import { getCurrentLangage } from "./language_setter.js";
 
 const form = document.querySelector("form#recorder");
 if (!form) {
@@ -35,8 +38,10 @@ form.addEventListener("submit", async (event) => {
 async function createRecord() {
     const el = form.elements;
 
-    const title_el = el.title;
-    const comment_el = el.comment;
+    const title_en_el = el.titleEn;
+    const comment_en_el = el.commentEn;
+    const title_ja_el = el.titleJa;
+    const comment_ja_el = el.commentJa;
     const timezone_el = el.timezone;
     const started_date_el = el.startedDate;
     const started_time_el = el.startedTime;
@@ -45,8 +50,10 @@ async function createRecord() {
     const type_id_el = el.typeId;
     const images_el = el.images;
 
-    const title = title_el.value.trim();
-    const comment = comment_el.value.trim();
+    const title_en = title_en_el.value.trim();
+    const comment_en = comment_en_el.value.trim();
+    const title_ja = title_ja_el.value.trim();
+    const comment_ja = comment_ja_el.value.trim();
     const type_id = type_id_el.value;
     
     const timezone = timezone_el.value;
@@ -66,8 +73,10 @@ async function createRecord() {
     
     try {
         const response = await createHistory(
-            title,
-            comment,
+            title_en,
+            title_ja,
+            comment_en,
+            comment_ja,
             type_id,
             timezone,
             uploaded,
@@ -160,44 +169,54 @@ function isValidTimezone(timezone) {
     }
 }
 
-// Initialize
-// timezone
-const timezones = Intl.supportedValuesOf("timeZone");
-const timezone_select = form.querySelector("select#timezone");
-if (!timezone_select) {
-    throw new Error("Necessary element not found: #timezone");
-};
+/**
+ * Run at first load.
+ * Set options of timezone and work types.
+ */
+async function main() {
+    // timezone
+    const timezones = Intl.supportedValuesOf("timeZone");
+    const timezone_select = form.querySelector("select#timezone");
+    if (!timezone_select) {
+        throw new Error("Necessary element not found: #timezone");
+    };
 
-for (const timezone of timezones) {
-    const option = document.createElement("option");
-
-    option.value = timezone;
-    option.textContent = timezone;
-
-    timezone_select.append(option);
-};
-
-const detected =
-    Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-timezone_select.value = detected;
-
-// work type
-const select = document.querySelector("select#work-type");
-if (!select) {
-    throw new Error("Necessary element not found: #work-type");
-};
-
-try {
-    const types = await getTypes(50);
-
-    for (const type of types) {
+    for (const timezone of timezones) {
         const option = document.createElement("option");
-        option.value = type.id;
-        option.innerText = type.name;
 
-        select.append(option);
+        option.value = timezone;
+        option.textContent = timezone;
+
+        timezone_select.append(option);
+    };
+
+    const detected =
+        Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    timezone_select.value = detected;
+
+    // work type
+    const select = document.querySelector("select#work-type");
+    if (!select) {
+        throw new Error("Necessary element not found: #work-type");
+    };
+
+    try {
+        const types = await getTypes(50);
+
+        for (const type of types) {
+            const option = document.createElement("option");
+            option.value = type.id;
+            const content = type.name[getCurrentLangage];
+            if (content) {
+                option.innerText = content;
+            }
+            
+            select.append(option);
+        }
+    } catch (error) {
+        console.error(error);
     }
-} catch (error) {
-    console.error(error);
 }
+
+await main()
