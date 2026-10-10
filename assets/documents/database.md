@@ -1,12 +1,12 @@
 ```mermaid
 erDiagram
-    HISTORY }|--|| WORK-TYPES : describe
-    HISTORY ||--o{ IMAGE : contains
-    HISTORY ||--|| TITLE : translate
-    HISTORY ||--|| COMMENT : translate
-    HISTORY {
-        int id PK
-        int type_id FK
+    histories }|--|| work_types : describe
+    histories ||--o{ images : contains
+    histories ||--|| titles : translate
+    histories ||--|| comments : translate
+    histories {
+        int id PK "NOT NULL"
+        int type_id FK "NOT NULL"
         text timezone "IANA Time Zone ID"
         text uploaded "YYYY-MM-DDTHH:MM:SSZ"
         text started "YYYY-MM-DDTHH:MM:SSZ"
@@ -14,37 +14,37 @@ erDiagram
         int break_minutes
     }
 
-    TITLE {
+    titles {
         int history_id FK
         text en
         text ja
     }
 
-    COMMENT {
+    comments {
         int history_id FK
         text en
         text ja
     }
 
-    IMAGE {
+    images {
         int id PK
         int history_id FK
         text path
     }
-    
-    WORK-TYPES ||--|| WORK-TYPE-NAME: translate
-    WORK-TYPES ||--|| WORK-TYPE-DESCRIPTION: translate
-    WORK-TYPES {
+
+    work_types ||--|| work_type_names: translate
+    work_types ||--|| work_type_descriptions : translate
+    work_types {
         int id PK
     }
 
-    WORK-TYPE-NAME {
+    work_type_names {
         int type_id FK
         text en
         text ja
     }
 
-    WORK-TYPE-DESCRIPTION {
+    work_type_descriptions {
         int type_id FK
         text en
         text ja
