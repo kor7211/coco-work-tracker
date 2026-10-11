@@ -49,11 +49,11 @@ function createHistoryElement(history) {
     const title = clone.querySelector(".title");
     const comment = clone.querySelector(".comment");
 
-    title.dataset.langEn = history.title.en;
-    title.dataset.langJa = history.title.ja;
+    title.dataset.langEn = history.titles.en;
+    title.dataset.langJa = history.titles.ja;
 
-    comment.dataset.langEn = history.comment.en;
-    comment.dataset.langJa = history.comment.ja;
+    comment.dataset.langEn = history.comments.en;
+    comment.dataset.langJa = history.comments.ja;
     
     return clone;
 }
