@@ -26,7 +26,7 @@ async function loadMore() {
             before_id = history.id;
         }
 
-        hasMore = data.hasMore;
+        hasMore = data.length >= LIMIT;
     } finally {
         loading = false;
     }
