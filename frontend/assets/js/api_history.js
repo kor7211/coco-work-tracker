@@ -83,7 +83,7 @@ export async function getHistories(
         );
     }
 
-    console.log(histories);
+    return histories;
 }
 
 /**
