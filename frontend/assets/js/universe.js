@@ -1,5 +1,5 @@
 import { getHistories } from "./api_history.js";
-import { titleCase } from "./case_formatter.js";
+import { getCurrentLangage } from "./language_setter.js";
 
 const container = document.getElementById("history-container");
 if (!container) {
@@ -21,7 +21,6 @@ async function loadMore() {
     try {
         const data = await getHistories(LIMIT, before, before_id);
 
-        console.log(data);
         for (const history of data) {
             container.append(createHistoryElement(history));
             before = history.started;
@@ -51,9 +50,13 @@ function createHistoryElement(history) {
 
     title.dataset.langEn = history.titles.en;
     title.dataset.langJa = history.titles.ja;
+    
+    title.textContent = history.titles[getCurrentLangage()];
 
     comment.dataset.langEn = history.comments.en;
     comment.dataset.langJa = history.comments.ja;
+
+    comment.textContent = history.comments[getCurrentLangage()];
     
     return clone;
 }
