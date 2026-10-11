@@ -33,7 +33,7 @@ export function getCurrentLangage() {
  *     - Replace all translatable texts.
  *     - Set the HTML lang attribute.
  */
-async function setLanguage(lang) {
+export async function setLanguage(lang) {
     if (!Object.hasOwn(translations, lang)) {
         throw new LanguageError(
             `language_setter.js:\nGiven language is invalid: '${lang}'`

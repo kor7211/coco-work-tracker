@@ -7,6 +7,7 @@
  * Expected:
  *  language_selector.css attached.
  */
+import { setLanguage } from "./language_setter.js";
 
 const selector = document.querySelector(".language-selector");
 if (!selector) {
