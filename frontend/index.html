@@ -1,28 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="author" content="Kohrin Suzuki">
-    <title data-i18n="title.home">title</title>
-    
-    
-</head>
-<body>
-    <header>
-        <h1 data-i18n="title.home"></h1>
-    </header>
-    <main>
-        <button onclick="setLanguage('ja')">ja</button>
-        <button onclick="setLanguage('en')">en</button>
+    <meta name="author" content="Coco-K">
+    <title data-i18n="title.home"></title>
 
+    <link rel="stylesheet" href="./assets/css/reset.css">
+    <link rel="stylesheet" href="./assets/css/variables.css">
+    <link rel="stylesheet" href="./assets/css/base.css">
+</head>
+
+<body>
+    <div class="wrapper hidden"></div>
+    <header>
+        <section class="logo-container">
+            <image src="./assets/images/logo64.jpg" alt="Logo"></image>
+            <h1 data-i18n="site.name"></h1>
+        </section>
+        <div class="language-selector">
+            <button class="language-button" type="button">
+                Lang
+                <span>⌄</span>
+            </button>
+
+            <div class="language-options">
+                <button type="button" data-lang="en">en</button>
+                <button type="button" data-lang="ja">jp</button>
+            </div>
+        </div>
+        <button class="navigation-button hamburger" type="button">
+            <span></span>
+        </button>
+    </header>
+    <nav>
         <ul>
-            <li><a href="./universe/index.html">universe</a></li>
-            <li><a href="./test_path/index.html">test-recoder</a></li>
+            <li><a href="#" data-i18n="page.home"></a></li>
+            <li><a href="./universe/index.html" data-i18n="page.universe"></a></li>
         </ul>
+    </nav>
+    <main>
+        <div id="history-container"></div>
+        <div id="scroll-trigger"></div>
     </main>
     <footer>
-
+        <section class="logo-container">
+            <image src="./assets/images/logo64.jpg" alt="Logo"></image>
+            <h1 data-i18n="site.name"></h1>
+        </section>
+        <p data-i18n="copyright"></p>
+        <ul>
+            <li><a href="#" data-i18n="page.home"></a></li>
+            <li><a href="./universe/index.html" data-i18n="page.universe"></a></li>
+        </ul>
     </footer>
-    <script src="assets/js/language_setter.js"></script>
+
+    <script type="module" src="./assets/js/language_setter.js"></script>
+    <script type="module" src="./assets/js/language_selector_controller.js"></script>
 </body>
+
 </html>

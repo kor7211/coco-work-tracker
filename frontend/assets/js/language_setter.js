@@ -98,7 +98,7 @@ function _getTranslation(data, key){
  * If the value is invalid, set 'en' as default.
  */
 function main(){
-    const lang = localStorage.getItem("language");
+    let lang = localStorage.getItem("language");
 
     try{
         if (!lang) lang = "en";
