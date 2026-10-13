@@ -14,7 +14,7 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property.EntryPointFilePath = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
-build_property.RootNamespace = recorder
+build_property.RootNamespace = RecorderApp
 build_property.ProjectDir = D:\users\kohrin\repository\coco-work-tracking\recorder\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
@@ -31,7 +31,7 @@ build_property.EnableCodeStyleSeverity =
 
 [D:/users/kohrin/repository/coco-work-tracking/recorder/App.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = recorder.App.xaml
+build_metadata.AdditionalFiles.ManifestResourceName = RecorderApp.App.xaml
 build_metadata.AdditionalFiles.TargetPath = App.xaml
 build_metadata.AdditionalFiles.RelativePath = App.xaml
 build_metadata.AdditionalFiles.Inflator = SourceGen
@@ -41,7 +41,7 @@ build_metadata.AdditionalFiles.LineInfo =
 
 [D:/users/kohrin/repository/coco-work-tracking/recorder/AppShell.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = recorder.AppShell.xaml
+build_metadata.AdditionalFiles.ManifestResourceName = RecorderApp.AppShell.xaml
 build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
 build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
 build_metadata.AdditionalFiles.Inflator = SourceGen
@@ -51,7 +51,7 @@ build_metadata.AdditionalFiles.LineInfo =
 
 [D:/users/kohrin/repository/coco-work-tracking/recorder/MainPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = recorder.MainPage.xaml
+build_metadata.AdditionalFiles.ManifestResourceName = RecorderApp.MainPage.xaml
 build_metadata.AdditionalFiles.TargetPath = MainPage.xaml
 build_metadata.AdditionalFiles.RelativePath = MainPage.xaml
 build_metadata.AdditionalFiles.Inflator = SourceGen
@@ -61,7 +61,7 @@ build_metadata.AdditionalFiles.LineInfo =
 
 [D:/users/kohrin/repository/coco-work-tracking/recorder/Resources/Styles/Colors.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = recorder.Resources.Styles.Colors.xaml
+build_metadata.AdditionalFiles.ManifestResourceName = RecorderApp.Resources.Styles.Colors.xaml
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Colors.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Colors.xaml
 build_metadata.AdditionalFiles.Inflator = SourceGen
@@ -71,7 +71,7 @@ build_metadata.AdditionalFiles.LineInfo =
 
 [D:/users/kohrin/repository/coco-work-tracking/recorder/Resources/Styles/Styles.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = recorder.Resources.Styles.Styles.xaml
+build_metadata.AdditionalFiles.ManifestResourceName = RecorderApp.Resources.Styles.Styles.xaml
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
 build_metadata.AdditionalFiles.Inflator = SourceGen

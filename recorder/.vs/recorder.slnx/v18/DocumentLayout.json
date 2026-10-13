@@ -1,14 +1,29 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\users\\kohrin\\repository\\coco-work-tracking\\recorder\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E816FC09-5F47-2A23-9003-117F9148E111}|recorder.csproj|d:\\users\\kohrin\\repository\\coco-work-tracking\\recorder\\recorder.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{E816FC09-5F47-2A23-9003-117F9148E111}|recorder.csproj|solutionrelative:recorder.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\users\\kohrin\\repository\\coco-work-tracking\\documents\\recorder-diagram.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E816FC09-5F47-2A23-9003-117F9148E111}|recorder.csproj|d:\\users\\kohrin\\repository\\coco-work-tracking\\recorder\\mauiprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E816FC09-5F47-2A23-9003-117F9148E111}|recorder.csproj|solutionrelative:mauiprogram.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\users\\kohrin\\repository\\coco-work-tracking\\documents\\recorder-diagram.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}|MarkdownPreview"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 384,
+          "DockedWidth": 248,
           "SelectedChildIndex": -1,
           "Children": [
             {
@@ -18,12 +33,75 @@
           ]
         },
         {
-          "DockedWidth": 22,
+          "DockedWidth": 384,
           "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{004be353-6879-467c-9d1e-9ac23cdf6d49}"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 2,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "recorder-diagram.md [\u30D7\u30EC\u30D3\u30E5\u30FC]",
+              "DocumentMoniker": "D:\\users\\kohrin\\repository\\coco-work-tracking\\documents\\recorder-diagram.md",
+              "RelativeDocumentMoniker": "..\\documents\\recorder-diagram.md",
+              "ToolTip": "D:\\users\\kohrin\\repository\\coco-work-tracking\\documents\\recorder-diagram.md [\u30D7\u30EC\u30D3\u30E5\u30FC]",
+              "RelativeToolTip": "..\\documents\\recorder-diagram.md [\u30D7\u30EC\u30D3\u30E5\u30FC]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2026-10-13T09:55:16.839Z",
+              "EditorCaption": " [\u30D7\u30EC\u30D3\u30E5\u30FC]"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 43,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "recorder",
+              "DocumentMoniker": "D:\\users\\kohrin\\repository\\coco-work-tracking\\recorder\\recorder.csproj",
+              "RelativeDocumentMoniker": "recorder.csproj",
+              "ToolTip": "D:\\users\\kohrin\\repository\\coco-work-tracking\\recorder\\recorder.csproj",
+              "RelativeToolTip": "recorder.csproj",
+              "ViewState": "AgIAADAAAAAAAAAAAAAAACEAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-10-13T12:14:42.267Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MauiProgram.cs",
+              "DocumentMoniker": "D:\\users\\kohrin\\repository\\coco-work-tracking\\recorder\\MauiProgram.cs",
+              "RelativeDocumentMoniker": "MauiProgram.cs",
+              "ToolTip": "D:\\users\\kohrin\\repository\\coco-work-tracking\\recorder\\MauiProgram.cs",
+              "RelativeToolTip": "MauiProgram.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-13T10:32:39.181Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "recorder-diagram.md",
+              "DocumentMoniker": "D:\\users\\kohrin\\repository\\coco-work-tracking\\documents\\recorder-diagram.md",
+              "RelativeDocumentMoniker": "..\\documents\\recorder-diagram.md",
+              "ToolTip": "D:\\users\\kohrin\\repository\\coco-work-tracking\\documents\\recorder-diagram.md",
+              "RelativeToolTip": "..\\documents\\recorder-diagram.md",
+              "ViewState": "AgIAABcAAAAAAAAAAAAQwDEAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2026-10-13T09:55:13.975Z",
+              "EditorCaption": ""
             }
           ]
         }

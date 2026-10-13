@@ -1,6 +1,9 @@
 # python
 __pycache__/
 
+# visual studio
+.vs/
+
 # Logs
 logs
 *.log

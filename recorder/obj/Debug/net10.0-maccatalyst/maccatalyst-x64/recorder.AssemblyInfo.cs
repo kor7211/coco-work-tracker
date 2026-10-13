@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("recorder")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+ca588739596ad530d2d42c1acfb379d329c87ce4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+3f448d9cc334d91fc3be575ddd741c7f79d6a0ec")]
 [assembly: System.Reflection.AssemblyProductAttribute("recorder")]
 [assembly: System.Reflection.AssemblyTitleAttribute("recorder")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
