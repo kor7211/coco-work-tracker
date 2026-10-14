@@ -1,5 +1,16 @@
 ```mermaid
 classDiagram
+	class MauiProgram {
+		<<static>>
+		+CreateMauiApp()
+	}
+	MauiProgram --> AppState : Instanctiate, AddSingleton
+
+	class AppState {
+		+List~History~ Histories
+		+List~WorkType~ WorkTypes
+	}
+
 	namespace Views {
 		class MainPage {
 			
@@ -39,27 +50,92 @@ classDiagram
 	ListTypePage ..> CreateTypePage : PuchAsync
 	ListRecordPage ..> CreateRecordPage : PuchAsync
 	ListRecordPage ..> CreateRecordPage : PuchAsync
+	ListRecordPage --> AppState : GetHistories
+	ListTypePage --> AppState : GetWorkTypes
+
+	namespace Controllers {
+		class HistoryManager {
+			+UpdateHistories()
+			+CreateHistory()
+		}
+
+		class WorkTypeManager {
+			+UpdateWorkTypes()
+			+CreateWorkType()
+		}
+	}
+	HistoryManager --> DatabaseConnection : GetHistory
+	HistoryManager --> AppState : UpdateHistories
+	WorkTypeManager --> DatabaseConnection : GetWorkTypes
+	WorkTypeManager --> AppState : UpdateWorkTypes
 
 	namespace Models {
-		class SupabaseConnection {
-
+		class DatabaseConnection {
+			<<static>>
+			+GetHistories(int limit, int offset) List~History~
+			+GetWorkTypes(int limit, int offset) List~WorkType~
+			+CreateHistory(History history)
+			+CreateWorkType(WorkType workType)
 		}
 
-		class ApiConnection {
-			<<abstruct>>
-			#GetClient() HTTPClient
+		class SupabaseService {			
+			-HttpClient _httpClient
+			+SupabaseConnection(HttpClient httpClient, string url, string key)
+			+GetAsync~T~()
+			+PostAsync~T~()
+			+PatchAsync~T~()
+			+DeleteAsync~T~()
 		}
-	}
-	SupabaseConnection --o ApiConnection : GetClient
 
-	class MauiProgram {
-		<<static>>
-		+CreateMauiApp()
-	}
-	MauiProgram --> AppState : Instanctiate, AddSingleton
+		class WorkType {
+			+long Id
+			+Names Names
+			+Descriptions Descriptions
+		}
 
-	class AppState {
+		class Names {
+			+string En
+			+string Ja
+		}
+
+		class Descriptions {
+			+string En
+			+string Ja
+		}
 		
-	}
+		class History {
+			+long Id
+			+long Type_id
+			+Titles Titles
+			+Comments Comments
+			+List~ImagePath~ Images
+			+string Timezone
+			+datetime Uploaded
+			+datetime Started
+			+int Duration_minutes
+			+int Break_minutes
+		}
 
+		class Titles {
+			+string En
+			+string Ja
+		}
+
+		class Comments {
+			+string En
+			+string Ja
+		}
+
+		class ImagePath {
+			+string Path
+		}
+	}
+	DatabaseConnection --o SupabaseService
+	DatabaseConnection --* History : JsonDeserialize
+	DatabaseConnection --* WorkType : JsonDeserialize
+	WorkType -- Names
+	WorkType -- Descriptions
+	History -- Titles
+	History -- Comments
+	History -- ImagePath
 ```
