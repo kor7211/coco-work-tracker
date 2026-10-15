@@ -15,6 +15,10 @@ classDiagram
 		class MainPage {
 			
 		}
+
+		class LoginPage {
+
+		}
 		
 
 		class CreateRecordPage {
@@ -44,6 +48,7 @@ classDiagram
 	MainPage <--> ListRecordPage : Shell
 	MainPage <--> ListTypePage : Shell
 	ListRecordPage <--> ListTypePage : Shell
+	MainPage ..> LoginPage : PushAsync
 	CreateRecordPage ..> CreateTypePage : PushAsync
 	ListRecordPage ..> EditRecordPage : PuchAsync
 	ListTypePage ..> EditTypePage : PuchAsync
