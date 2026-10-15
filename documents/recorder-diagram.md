@@ -50,24 +50,26 @@ classDiagram
 	ListTypePage ..> CreateTypePage : PuchAsync
 	ListRecordPage ..> CreateRecordPage : PuchAsync
 	ListRecordPage ..> CreateRecordPage : PuchAsync
-	ListRecordPage --> AppState : GetHistories
-	ListTypePage --> AppState : GetWorkTypes
+	ListRecordPage --> HistoryManager : GetHistories
+	ListTypePage --> WorkTypeManager : GetWorkTypes
 
 	namespace Controllers {
 		class HistoryManager {
-			+UpdateHistories()
+			-UpdateHistories()
 			+CreateHistory()
+			+GetHistories() List~Histories~
 		}
 
 		class WorkTypeManager {
-			+UpdateWorkTypes()
+			-UpdateWorkTypes()
 			+CreateWorkType()
+			+GetWorkTypes() List~WorkType~
 		}
 	}
-	HistoryManager --> DatabaseConnection : GetHistory
-	HistoryManager --> AppState : UpdateHistories
-	WorkTypeManager --> DatabaseConnection : GetWorkTypes
-	WorkTypeManager --> AppState : UpdateWorkTypes
+	HistoryManager --> DatabaseConnection : Call History fucntions
+	HistoryManager --> AppState : Save | Load
+	WorkTypeManager --> DatabaseConnection : Call WorkTypes functions
+	WorkTypeManager --> AppState : Save | Load
 
 	namespace Models {
 		class DatabaseConnection {
