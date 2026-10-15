@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Shell
-    x:Class="recorder.AppShell"
+    x:Class="Recorder.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:recorder"
-    Title="recorder">
+    xmlns:views="clr-namespace:Recorder.Views"
+    Title="Recorder">
 
     <ShellContent
         Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        ContentTemplate="{DataTemplate views:MainPage}"
+        Route="home" />
 
+    <ShellContent
+        Title="Records"
+        ContentTemplate="{DataTemplate views:ListRecordPage}"
+        Route="records" />
+
+    <ShellContent
+        Title="Types"
+        ContentTemplate="{DataTemplate views:ListTypePage}"
+        Route="types" />
 </Shell>

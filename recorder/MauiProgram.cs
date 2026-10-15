@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace recorder
+namespace Recorder
 {
     public static class MauiProgram
     {

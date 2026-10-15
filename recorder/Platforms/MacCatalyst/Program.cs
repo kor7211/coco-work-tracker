@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace recorder
+namespace Recorder
 {
     public class Program
     {

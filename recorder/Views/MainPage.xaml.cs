@@ -1,4 +1,4 @@
-﻿namespace recorder
+﻿namespace Recorder.Views
 {
     public partial class MainPage : ContentPage
     {
