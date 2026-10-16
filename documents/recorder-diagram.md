@@ -7,6 +7,7 @@ classDiagram
 	MauiProgram --> AppState : Instanctiate, AddSingleton
 
 	class AppState {
+		+Supabase.Gotrue.Session Session
 		+List~History~ Histories
 		+List~WorkType~ WorkTypes
 	}
@@ -113,9 +114,9 @@ classDiagram
 		class History {
 			+long Id
 			+long Type_id
-			+Titles Titles
-			+Comments Comments
-			+List~ImagePath~ Images
+			+Languages Titles
+			+Languages Comments
+			+List~ImagePath~ ImagePaths
 			+string Timezone
 			+datetime Uploaded
 			+datetime Started
@@ -123,12 +124,7 @@ classDiagram
 			+int Break_minutes
 		}
 
-		class Titles {
-			+string En
-			+string Ja
-		}
-
-		class Comments {
+		class Languages {
 			+string En
 			+string Ja
 		}

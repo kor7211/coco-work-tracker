@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Supabase;
 
-namespace RecorderApp.Models
+namespace Recorder.Models
 {
-    internal class DatabaseConnection
+    public static class DatabaseConnection
     {
+        
     }
 }

@@ -1,81 +1,57 @@
-﻿using System.Net.Http.Headers;
+﻿using Recorder.Models;
+using Supabase;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
-public sealed class SupabaseService
+namespace Recorder.Models
 {
-    private readonly HttpClient _httpClient;
-
-    public SupabaseService(
-        HttpClient httpClient,
-        string supabaseUrl,
-        string apiKey)
+    public sealed class SupabaseService
     {
-        _httpClient = httpClient;
-
-        _httpClient.BaseAddress = new Uri(
-            $"{supabaseUrl.TrimEnd('/')}/rest/v1/");
-
-        _httpClient.DefaultRequestHeaders.Add(
-            "apikey", apiKey);
-
-        _httpClient.DefaultRequestHeaders.Accept.Add(
-            new MediaTypeWithQualityHeaderValue(
-                "application/json"));
-    }
-
-    public async Task<List<T>> GetAsync<T>(
-        string table,
-        CancellationToken cancellationToken = default)
-    {
-        using var response = await _httpClient.GetAsync(
-            $"{table}?select=*",
-            cancellationToken);
-
-        response.EnsureSuccessStatusCode();
-
-        var json = await response.Content.ReadAsStringAsync(
-            cancellationToken);
-
-        return JsonSerializer.Deserialize<List<T>>(json)
-            ?? [];
-    }
-
-    public async Task PostAsync<T>(
-        string table,
-        T data,
-        CancellationToken cancellationToken = default)
-    {
-        var json = JsonSerializer.Serialize(data);
-
-        using var content = new StringContent(
-            json, Encoding.UTF8, "application/json");
-
-        using var response = await _httpClient.PostAsync(
-            table, content, cancellationToken);
-
-        response.EnsureSuccessStatusCode();
-    }
-
-    public async Task PatchAsync<T>(
-        string table,
-        string filter,
-        T data,
-        CancellationToken cancellationToken = default)
-    {
-        var json = JsonSerializer.Serialize(data);
-
-        using var request = new HttpRequestMessage(
-            HttpMethod.Patch,
-            $"{table}?{filter}")
+        public static async Task<Supabase.Client> GetClientAsync()
         {
-            Content = new StringContent(
-                json, Encoding.UTF8, "application/json")
-        };
+            SupabaseOptions options = new SupabaseOptions
+            {
+                AutoRefreshToken = true,
+                AutoConnectRealtime = false
+            };
 
-        using var response = await _httpClient.SendAsync(
-            request, cancellationToken);
+            Client supabase = new Client(
+                "https://wdxlljbnprencuzyentl.supabase.co",
+                "sb_publishable_b2OreJpe_3vzy5heaDvYSw_IzbGX8J_",
+                options
+            );
 
-        response.EnsureSuccessStatusCode();
+            await supabase.InitializeAsync();
+
+            return supabase;
+        }
+
+        private readonly Client _supabase;
+
+        public SupabaseService(Client client)
+        {
+            _supabase = client;
+        }
+
+        public async Task<List<History>> GetHistoriesAsync()
+        {
+            var response = await _supabase
+                .From<History>()
+                .Select("*, titles(*), comments(*), images(*)")
+                .Get();
+
+            return response.Models;
+        }
+
+        public async Task<List<WorkType>> GetWorkTypesAsync()
+        {
+            var response = await _supabase
+                .From<WorkType>()
+                .Select("*, work_type_names(*), work_type_descriptions(*)")
+                .Get();
+
+            return response.Models;
+        }
     }
 }
