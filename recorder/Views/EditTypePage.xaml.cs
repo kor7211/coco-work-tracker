@@ -1,4 +1,4 @@
-namespace RecorderApp.Views;
+namespace Recorder.Views;
 
 public partial class EditTypePage : ContentPage
 {
