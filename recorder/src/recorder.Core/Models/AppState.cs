@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using Supabase;
-using Supabase.Gotrue;
 
-namespace Recorder
+namespace Recorder.Models
 {
     public class AppState
     {

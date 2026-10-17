@@ -2,6 +2,9 @@
 .vs/
 bin/
 obj/
+**/bin/
+**/obj/
+**/.vs/
 
 # User-specific files
 *.user

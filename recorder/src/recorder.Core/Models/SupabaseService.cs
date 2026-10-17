@@ -8,6 +8,13 @@ namespace Recorder.Models
 {
     public sealed class SupabaseService
     {
+        /// <summary>
+        /// Get initialized supabase Client.
+        /// Call 
+        ///     .Auth.SignIn(email, password) 
+        /// to get session.
+        /// </summary>
+        /// <returns>Task~Supabase.Client~</returns>
         public static async Task<Supabase.Client> GetClientAsync()
         {
             SupabaseOptions options = new SupabaseOptions
