@@ -7,6 +7,7 @@ classDiagram
 	MauiProgram --> AppState : Instanctiate, AddSingleton
 
 	class AppState {
+		+Supabase.Gotrue.Session Session
 		+List~History~ Histories
 		+List~WorkType~ WorkTypes
 	}
@@ -14,6 +15,10 @@ classDiagram
 	namespace Views {
 		class MainPage {
 			
+		}
+
+		class LoginPage {
+
 		}
 		
 
@@ -44,30 +49,33 @@ classDiagram
 	MainPage <--> ListRecordPage : Shell
 	MainPage <--> ListTypePage : Shell
 	ListRecordPage <--> ListTypePage : Shell
+	MainPage ..> LoginPage : PushAsync
 	CreateRecordPage ..> CreateTypePage : PushAsync
 	ListRecordPage ..> EditRecordPage : PuchAsync
 	ListTypePage ..> EditTypePage : PuchAsync
 	ListTypePage ..> CreateTypePage : PuchAsync
 	ListRecordPage ..> CreateRecordPage : PuchAsync
 	ListRecordPage ..> CreateRecordPage : PuchAsync
-	ListRecordPage --> AppState : GetHistories
-	ListTypePage --> AppState : GetWorkTypes
+	ListRecordPage --> HistoryManager : GetHistories
+	ListTypePage --> WorkTypeManager : GetWorkTypes
 
 	namespace Controllers {
 		class HistoryManager {
-			+UpdateHistories()
+			-UpdateHistories()
 			+CreateHistory()
+			+GetHistories() List~Histories~
 		}
 
 		class WorkTypeManager {
-			+UpdateWorkTypes()
+			-UpdateWorkTypes()
 			+CreateWorkType()
+			+GetWorkTypes() List~WorkType~
 		}
 	}
-	HistoryManager --> DatabaseConnection : GetHistory
-	HistoryManager --> AppState : UpdateHistories
-	WorkTypeManager --> DatabaseConnection : GetWorkTypes
-	WorkTypeManager --> AppState : UpdateWorkTypes
+	HistoryManager --> DatabaseConnection : Call History fucntions
+	HistoryManager --> AppState : Save | Load
+	WorkTypeManager --> DatabaseConnection : Call WorkTypes functions
+	WorkTypeManager --> AppState : Save | Load
 
 	namespace Models {
 		class DatabaseConnection {
@@ -106,9 +114,9 @@ classDiagram
 		class History {
 			+long Id
 			+long Type_id
-			+Titles Titles
-			+Comments Comments
-			+List~ImagePath~ Images
+			+Languages Titles
+			+Languages Comments
+			+List~ImagePath~ ImagePaths
 			+string Timezone
 			+datetime Uploaded
 			+datetime Started
@@ -116,12 +124,7 @@ classDiagram
 			+int Break_minutes
 		}
 
-		class Titles {
-			+string En
-			+string Ja
-		}
-
-		class Comments {
+		class Languages {
 			+string En
 			+string Ja
 		}
