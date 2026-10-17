@@ -7,6 +7,7 @@ namespace Recorder.Tests
     public sealed class TestSupabaseService
     {
         private SupabaseService Supabase;
+        private Supabase.Gotrue.Session? Session;
 
         /// <summary>
         /// Initialize supabase before tests. 
@@ -25,7 +26,7 @@ namespace Recorder.Tests
         [TestInitialize]
         public async Task Initializa()
         {
-            Client client = await SupabaseService.GetClientAsync();
+            Supabase.Client client = await SupabaseService.GetClientAsync();
 
             string email = Environment.GetEnvironmentVariable("ADMIN_EMAIL")
                 ?? throw new InvalidOperationException("ADMIN_EMAIL is not set.");
@@ -33,10 +34,16 @@ namespace Recorder.Tests
             string password = Environment.GetEnvironmentVariable("ADMIN_PASSWORD")
                 ?? throw new InvalidOperationException("ADMIN_PASSWORD is not set.");
 
-            await client.Auth.SignIn(
+            Session = await client.Auth.SignIn(
                 email,
                 password
                 );
+
+            var session = client.Auth.CurrentSession;
+
+            Console.WriteLine($"Session exists: {session is not null}");
+            Console.WriteLine($"User ID: {session?.User?.Id}");
+            Console.WriteLine($"Access token exists: {!string.IsNullOrEmpty(session?.AccessToken)}");
 
             Supabase = new SupabaseService(client);
         }
@@ -71,32 +78,42 @@ namespace Recorder.Tests
         }
 
         [TestMethod]
+        public async Task TestSessionAuthenticated()
+        {
+            Assert.IsNotNull(Session);
+        }
+
+        [TestMethod]
         public async Task TestGetHistories()
         {
-            //Arrange
-
-            //Act
             List<History> response = await Supabase.GetHistoriesAsync();
+
+            Assert.IsNotNull(response);
+            Assert.IsTrue(
+                response.Count > 0,
+                "No histories were returned from Supabase."
+            );
+
             History actual = response[0];
 
-            //Assert
             Assert.IsNotNull(actual);
-
             Assert.IsInstanceOfType<History>(actual);
         }
 
         [TestMethod]
         public async Task TestGetWorkTypes()
         {
-            //Arrange
+            List<WorkType> response = await Supabase.GetWorkTypesAsync();
 
-            //Act
-            List<History> response = await Supabase.GetHistoriesAsync();
-            History actual = response[0];
+            Assert.IsNotNull(response);
+            Assert.IsTrue(
+                response.Count > 0,
+                "No types were returned from Supabase."
+            );
 
-            //Assert
+            WorkType actual = response[0];
+
             Assert.IsNotNull(actual);
-
             Assert.IsInstanceOfType<WorkType>(actual);
         }
     }
