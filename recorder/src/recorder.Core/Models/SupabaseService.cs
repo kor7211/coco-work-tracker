@@ -89,13 +89,65 @@ namespace Recorder.Core.Models
                 .Delete();
         }
 
+        /// <summary>
+        /// Edit pre-existing record.
+        /// 
+        /// ImagePath:
+        ///     If new image path is in the List, new record will be created in images table.
+        ///     New image path's id need to be specified as null.
+        ///     If existed image path disappered in the List, it will be deleted. It means brank List deletes all image paths.
+        ///     
+        /// </summary>
+        /// <param name="history">Edited record</param>
+        /// <returns>Task</returns>
         public async Task UpdateHistoryAsync(History history)
         {
-            await _supabase
-                .From<History>()
-                .Update(history);
+            ArgumentNullException.ThrowIfNull(history);
+            ArgumentNullException.ThrowIfNull(history.Titles);
+            ArgumentNullException.ThrowIfNull(history.Comments);
+            ArgumentNullException.ThrowIfNull(history.ImagePaths);
 
-            // add feature to add image, title, comment
+            var payload = new
+            {
+                history = new
+                {
+                    id = history.Id,
+                    type_id = history.TypeId,
+                    timezone = history.Timezone,
+                    started = history.Started.ToUniversalTime().ToString("O"),
+                    uploaded = history.Uploaded.ToUniversalTime().ToString("O"),
+                    duration_minutes = history.DurationMinutes,
+                    break_minutes = history.BreakMinutes
+                },
+
+                titles = new
+                {
+                    en = history.Titles.En,
+                    ja = history.Titles.Ja
+                },
+
+                comments = new
+                {
+                    en = history.Comments.En,
+                    ja = history.Comments.Ja
+                },
+
+                images = history.ImagePaths.Select(image => new
+                {
+                    id = image.Id,
+                    path = image.Path
+                }).ToList()
+            };
+
+            var json = JsonSerializer.SerializeToElement(payload);
+
+            var response = await _supabase.Rpc(
+                "update_history",
+                new Dictionary<string, object>
+                {
+                    ["p_payload"] = json
+                }
+            );
         }
 
         public async Task<List<WorkType>> GetWorkTypesAsync()
