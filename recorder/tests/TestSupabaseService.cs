@@ -4,22 +4,25 @@ using Supabase;
 namespace Recorder.Tests
 {
     [TestClass]
+    [DoNotParallelize]
     public sealed class TestSupabaseService
     {
-        private SupabaseService Supabase;
+        private SupabaseService _supabase;
+        private History _testHistory;
+
         private Supabase.Gotrue.Session? Session;
 
         /// <summary>
         /// Initialize supabase before tests. 
         /// Email and password are requried to be saved as Powershell's enviromental valiables.
-        /// '''PowerShell
-        /// $email = Read-Host "Admin Email"
-        /// $securePassword = Read-Host "Admin Password" -AsSecureString
-        ///
-        /// $env:ADMIN_EMAIL = $email
-        /// $env:ADMIN_PASSWORD = [System.Net.NetworkCredential]::new ("", $securePassword).Password
-        ///
-        /// dotnet test
+        /// '''PowerShell 
+        /*
+$email = Read-Host "Admin Email"
+$securePassword = Read-Host "Admin Password" -AsSecureString
+$env:ADMIN_EMAIL = $email
+$env:ADMIN_PASSWORD = [System.Net.NetworkCredential]::new("", $securePassword).Password
+dotnet test
+        */
         /// '''
         /// </summary>
         /// <exception cref="InvalidOperationException">Email or password not found</exception>
@@ -45,52 +48,51 @@ namespace Recorder.Tests
             Console.WriteLine($"User ID: {session?.User?.Id}");
             Console.WriteLine($"Access token exists: {!string.IsNullOrEmpty(session?.AccessToken)}");
 
-            Supabase = new SupabaseService(client);
-        }
+            _supabase = new SupabaseService(client);
 
-        private static string ReadPassword()
-        {
-            var password = new System.Text.StringBuilder();
-
-            while (true)
+            _testHistory = new History()
             {
-                var key = Console.ReadKey(intercept: true);
-
-                if (key.Key == ConsoleKey.Enter)
+                TypeId = 1,
+                Timezone = "Australia/Perth",
+                Uploaded = new DateTimeOffset(2026, 1, 1, 0, 0, 0, TimeSpan.Zero),
+                Started = new DateTimeOffset(2026, 1, 1, 0, 0, 0, TimeSpan.Zero),
+                DurationMinutes = 60,
+                BreakMinutes = 20,
+                Titles = new Titles()
                 {
-                    Console.WriteLine();
-                    break;
-                }
-
-                if (key.Key == ConsoleKey.Backspace)
+                    Ja = "テスト",
+                    En = "Test"
+                },
+                Comments = new Comments()
                 {
-                    if (password.Length > 0)
-                        password.Length--;
-
-                    continue;
+                    Ja = "テストコメント",
+                    En = "Test Comment"
+                },
+                ImagePaths = new List<ImagePath>()
+                {
+                    new ImagePath()
+                    {
+                        Path = "/test/test.jpg"
+                    }
                 }
-
-                if (!char.IsControl(key.KeyChar))
-                    password.Append(key.KeyChar);
-            }
-
-            return password.ToString();
+            };
         }
+
 
         [TestMethod]
-        public async Task TestSessionAuthenticated()
+        public async Task A01_TestSessionAuthenticated()
         {
             Assert.IsNotNull(Session);
         }
 
         [TestMethod]
-        public async Task TestGetHistories()
+        public async Task A02_TestGetHistories()
         {
-            List<History> response = await Supabase.GetHistoriesAsync();
+            List<History> response = await _supabase.GetHistoriesAsync();
 
             Assert.IsNotNull(response);
-            Assert.IsTrue(
-                response.Count > 0,
+            Assert.IsNotEmpty(
+                response,
                 "No histories were returned from Supabase."
             );
 
@@ -101,13 +103,13 @@ namespace Recorder.Tests
         }
 
         [TestMethod]
-        public async Task TestGetWorkTypes()
+        public async Task A03_TestGetWorkTypes()
         {
-            List<WorkType> response = await Supabase.GetWorkTypesAsync();
+            List<WorkType> response = await _supabase.GetWorkTypesAsync();
 
             Assert.IsNotNull(response);
-            Assert.IsTrue(
-                response.Count > 0,
+            Assert.IsNotEmpty(
+                response,
                 "No types were returned from Supabase."
             );
 
@@ -115,6 +117,101 @@ namespace Recorder.Tests
 
             Assert.IsNotNull(actual);
             Assert.IsInstanceOfType<WorkType>(actual);
+        }
+
+        [TestMethod]
+        public async Task B01_TestCreateHistory()
+        {
+            long id = -1;
+            try
+            {
+                //Arrange
+
+                //Act
+                id = await _supabase.CreateHistoryAsync(_testHistory);
+
+                List<History> response = await _supabase.GetHistoriesAsync();
+
+                //Assert
+                Assert.IsTrue(response.Any(x => x.Id == id && x.Titles?.En == "Test"));
+            } catch (Exception error)
+            {
+               Assert.Fail("Coud not create: " + error.Message);
+            } finally
+            {
+                if (id != -1)
+                {
+                    await _supabase.DeleteHistoryAsync(id);
+                }
+            }
+        }
+
+        [TestMethod]
+        public async Task B02_TestDeleteHistory()
+        {
+            long id = -1;
+            try
+            {
+                //Arrange
+                List<History> response = await _supabase.GetHistoriesAsync();
+                int expected = response.Count + 1;
+
+                //Act
+                id = await _supabase.CreateHistoryAsync(_testHistory);
+
+                List<History> actual_res = await _supabase.GetHistoriesAsync();
+                int actual = actual_res.Count;
+
+                //Assert
+                Assert.AreEqual(expected, actual);
+            }
+            catch (Exception error)
+            {
+                Assert.Fail("Test Filed: " + error.Message);
+            } finally
+            {
+                if (id != -1)
+                {
+                    await _supabase.DeleteHistoryAsync(id);
+                }
+            }
+        }
+
+        [TestMethod]
+        public async Task B03_TestUpdateHistory()
+        {
+            long id = -1;
+            try
+            {
+                //Arrange
+                id = await _supabase.CreateHistoryAsync(_testHistory);
+
+                _testHistory.Id = id;
+                _testHistory.TypeId = 2;
+                _testHistory.Titles?.En = "New Test Title";
+                _testHistory.ImagePaths = new List<ImagePath>();
+
+                //Act
+                await _supabase.UpdateHistoryAsync(_testHistory);
+                List<History> res = await _supabase.GetHistoriesAsync();
+                History? actual = res.Find(x => x.Id == id);
+
+                //Assert
+                Assert.IsNotNull(actual);
+                Assert.AreEqual(_testHistory.TypeId, actual.TypeId);
+                Assert.AreEqual(_testHistory.Titles?.En, actual.Titles?.En);
+                Assert.IsEmpty(_testHistory.ImagePaths);
+            }
+            catch (Exception error)
+            {
+                Assert.Fail("Test Filed: " + error.Message);
+            } finally
+            {
+                if (id != -1)
+                {
+                    await _supabase.DeleteHistoryAsync(id);
+                }
+            }
         }
     }
 }
