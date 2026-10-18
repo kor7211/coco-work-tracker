@@ -97,13 +97,13 @@ namespace Recorder.Core.Models
         /// <summary>
         /// Delete record from histories table. Also, related records will be removed from their tables as their set action on DELETE.
         /// </summary>
-        /// <param name="history_id">Target record's id</param>
+        /// <param name="historyId">Target record's id</param>
         /// <returns>Task</returns>
-        public async Task DeleteHistoryAsync(long history_id)
+        public async Task DeleteHistoryAsync(long historyId)
         {
             await _supabase
                 .From<History>()
-                .Where(x => x.Id == history_id)
+                .Where(x => x.Id == historyId)
                 .Delete();
         }
 
@@ -168,6 +168,10 @@ namespace Recorder.Core.Models
             );
         }
 
+        /// <summary>
+        /// Get all work types.
+        /// </summary>
+        /// <returns>Task list of work type instance</returns>
         public async Task<List<WorkType>> GetWorkTypesAsync()
         {
             var response = await _supabase
@@ -176,6 +180,59 @@ namespace Recorder.Core.Models
                 .Get();
 
             return response.Models;
+        }
+
+        /// <summary>
+        /// Delete a record in work_types table and all related rows in other tables.
+        /// If there is a history referring to the record's id, this will fail.
+        /// </summary>
+        /// <param name="typeId">Work type id</param>
+        /// <returns>Task</returns>
+        public async Task DeleteWorkTypeAsync(long typeId)
+        {
+            await _supabase
+                .From<WorkType>()
+                .Where(x => x.Id == typeId)
+                .Delete();
+        }
+
+        /// <summary>
+        /// Update pre-existing work type.
+        /// </summary>
+        /// <param name="workType">Edited work type</param>
+        /// <returns></returns>
+        public async Task Update(WorkType workType)
+        {
+            ArgumentNullException.ThrowIfNull(workType);
+            ArgumentNullException.ThrowIfNull(workType.Names);
+            ArgumentNullException.ThrowIfNull(workType.Descriptions);
+
+            var payload = new
+            {
+                id = workType.Id,
+
+                names = new
+                {
+                    en = workType.Names.En,
+                    ja = workType.Names.Ja
+                },
+
+                descriptions = new
+                {
+                    en = workType.Descriptions.En,
+                    ja = workType.Descriptions.Ja
+                }
+            };
+
+            var json = JsonSerializer.SerializeToElement(payload);
+
+            var response = await _supabase.Rpc(
+                "update_work_type",
+                new Dictionary<string, object>
+                {
+                    ["p_payload"] = json
+                }
+            );
         }
     }
 }
