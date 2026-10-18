@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using Supabase;
 
-namespace Recorder.Models
-{
+    namespace Recorder.Core.Models
+    {
     public class AppState
     {
         private readonly Supabase.Client _supabase;

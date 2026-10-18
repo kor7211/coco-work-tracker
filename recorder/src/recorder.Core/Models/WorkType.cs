@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Supabase.Postgrest.Models;
 using Supabase.Postgrest.Attributes;
 
-namespace Recorder.Models
+namespace Recorder.Core.Models
 {
     [Table("work_types")]
     public  class WorkType : BaseModel

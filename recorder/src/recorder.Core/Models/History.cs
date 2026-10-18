@@ -2,7 +2,7 @@
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 
-namespace Recorder.Models
+namespace Recorder.Core.Models
 {
     [Table("histories")]
     public class History : BaseModel

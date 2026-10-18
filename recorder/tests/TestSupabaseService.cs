@@ -1,4 +1,4 @@
-﻿using Recorder.Models;
+﻿using Recorder.Core.Models;
 using Supabase;
 
 namespace Recorder.Tests
@@ -26,7 +26,7 @@ namespace Recorder.Tests
         [TestInitialize]
         public async Task Initializa()
         {
-            Supabase.Client client = await SupabaseService.GetClientAsync();
+            Supabase.Client client = await SupabaseClientGenerator.GetClientAsync();
 
             string email = Environment.GetEnvironmentVariable("ADMIN_EMAIL")
                 ?? throw new InvalidOperationException("ADMIN_EMAIL is not set.");
