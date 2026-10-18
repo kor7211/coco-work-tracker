@@ -34,7 +34,9 @@ namespace Recorder.Core.Models
         /// </summary>
         /// <param name="history">Model instance representing new record</param>
         /// <returns>Created record's id</returns>
-        public async Task CreateHistoryAsync(History history)
+        /// <exception cref="HttpRequestException">Thrown when api access failed</exception>
+        /// <exception cref="InvalidOperationException">Thrown when response's type is not long</exception>
+        public async Task<long> CreateHistoryAsync(History history)
         {
             var payload = new
             {
@@ -73,7 +75,23 @@ namespace Recorder.Core.Models
                 }
             );
 
-            // return id in response
+            if (!response.ResponseMessage.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException(
+                    $"CreateHistory failed: " +
+                    $"{response.ResponseMessage.StatusCode}, " +
+                    $"{response.Content}"
+                    );
+            }
+
+            if (!long.TryParse(response.Content, out long historyId))
+            {
+                throw new InvalidOperationException(
+                    $"Invalid history ID: {response.Content}"
+                );
+            }
+
+            return historyId;
         }
 
         /// <summary>

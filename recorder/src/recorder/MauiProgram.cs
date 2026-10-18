@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Recorder.Views;
-using Recorder.Models;
+using Recorder.Core.Models;
 
 namespace Recorder
 {
