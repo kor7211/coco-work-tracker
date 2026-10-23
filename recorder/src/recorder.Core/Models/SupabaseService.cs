@@ -214,14 +214,14 @@ namespace Recorder.Core.Models
                 "create_work_type",
                 new Dictionary<string, object>
                 {
-                    ["p_woek_type"] = json
+                    ["p_work_type"] = json
                 }
             );
 
             if (!response.ResponseMessage.IsSuccessStatusCode)
             {
                 throw new HttpRequestException(
-                    $"CreateHistory failed: " +
+                    $"CreateWorkType failed: " +
                     $"{response.ResponseMessage.StatusCode}, " +
                     $"{response.Content}"
                     );
@@ -230,7 +230,7 @@ namespace Recorder.Core.Models
             if (!long.TryParse(response.Content, out long typeId))
             {
                 throw new InvalidOperationException(
-                    $"Invalid history ID: {response.Content}"
+                    $"Invalid type ID: {response.Content}"
                 );
             }
 
