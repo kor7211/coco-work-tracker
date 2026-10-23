@@ -9,6 +9,7 @@ namespace Recorder.Tests
     {
         private SupabaseService _supabase;
         private History _testHistory;
+        private WorkType _testWorkType;
 
         private Supabase.Gotrue.Session? Session;
 
@@ -76,6 +77,20 @@ dotnet test
                     }
                 }
             };
+
+            _testWorkType = new WorkType()
+            {
+                Names = new Names()
+                {
+                    Ja = "テストタイプ",
+                    En = "Test type"
+                },
+                Descriptions = new Descriptions()
+                {
+                    Ja = "ユニットテスト用のタイプ。意味はない。",
+                    En = "Work type made for unit testing. Doesn't mean anything."
+                }
+            };
         }
 
 
@@ -100,23 +115,6 @@ dotnet test
 
             Assert.IsNotNull(actual);
             Assert.IsInstanceOfType<History>(actual);
-        }
-
-        [TestMethod]
-        public async Task A03_TestGetWorkTypes()
-        {
-            List<WorkType> response = await _supabase.GetWorkTypesAsync();
-
-            Assert.IsNotNull(response);
-            Assert.IsNotEmpty(
-                response,
-                "No types were returned from Supabase."
-            );
-
-            WorkType actual = response[0];
-
-            Assert.IsNotNull(actual);
-            Assert.IsInstanceOfType<WorkType>(actual);
         }
 
         [TestMethod]
@@ -146,39 +144,40 @@ dotnet test
             }
         }
 
+        // This test does not test deleting history properry. Should be fixed or recreated.
+        //[TestMethod]
+        //public async Task B02_TestDeleteHistory()
+        //{
+        //    long id = -1;
+        //    try
+        //    {
+        //        //Arrange
+        //        List<History> response = await _supabase.GetHistoriesAsync();
+        //        int expected = response.Count + 1;
+
+        //        //Act
+        //        id = await _supabase.CreateHistoryAsync(_testHistory);
+
+        //        List<History> actual_res = await _supabase.GetHistoriesAsync();
+        //        int actual = actual_res.Count;
+
+        //        //Assert
+        //        Assert.AreEqual(expected, actual);
+        //    }
+        //    catch (Exception error)
+        //    {
+        //        Assert.Fail("Test Filed: " + error.Message);
+        //    } finally
+        //    {
+        //        if (id != -1)
+        //        {
+        //            await _supabase.DeleteHistoryAsync(id);
+        //        }
+        //    }
+        //}
+
         [TestMethod]
-        public async Task B02_TestDeleteHistory()
-        {
-            long id = -1;
-            try
-            {
-                //Arrange
-                List<History> response = await _supabase.GetHistoriesAsync();
-                int expected = response.Count + 1;
-
-                //Act
-                id = await _supabase.CreateHistoryAsync(_testHistory);
-
-                List<History> actual_res = await _supabase.GetHistoriesAsync();
-                int actual = actual_res.Count;
-
-                //Assert
-                Assert.AreEqual(expected, actual);
-            }
-            catch (Exception error)
-            {
-                Assert.Fail("Test Filed: " + error.Message);
-            } finally
-            {
-                if (id != -1)
-                {
-                    await _supabase.DeleteHistoryAsync(id);
-                }
-            }
-        }
-
-        [TestMethod]
-        public async Task B03_TestUpdateHistory()
+        public async Task B03_TestUpdateHistoryAsync()
         {
             long id = -1;
             try
@@ -210,6 +209,121 @@ dotnet test
                 if (id != -1)
                 {
                     await _supabase.DeleteHistoryAsync(id);
+                }
+            }
+        }
+
+        [TestMethod]
+        public async Task C01_TestGetWorkTypes()
+        {
+            List<WorkType> response = await _supabase.GetWorkTypesAsync();
+
+            Assert.IsNotNull(response);
+            Assert.IsNotEmpty(
+                response,
+                "No types were returned from Supabase."
+            );
+
+            WorkType actual = response[0];
+
+            Assert.IsNotNull(actual);
+            Assert.IsInstanceOfType<WorkType>(actual);
+        }
+
+        [TestMethod]
+        public async Task D01_TestCreateWorkType()
+        {
+            long id = -1;
+            try
+            {
+                //Arrange
+
+                //Act
+                id = await _supabase.CreateWorkTypeAsync(_testWorkType);
+
+                List<WorkType> response = await _supabase.GetWorkTypesAsync();
+
+                //Assert
+                Assert.IsTrue(response.Any(x => x.Id == id && x.Names?.En == "Test type"));
+            }
+            catch (Exception error)
+            {
+                Assert.Fail("Coud not create: " + error.Message);
+            }
+            finally
+            {
+                if (id != -1)
+                {
+                    await _supabase.DeleteWorkTypeAsync(id);
+                }
+            }
+        }
+
+        // Same as history, this one is not testing deletion. fix this.
+        //[TestMethod]
+        //public async Task D02_TestDeleteWorkType()
+        //{
+        //    long id = -1;
+        //    try
+        //    {
+        //        //Arrange
+        //        List<WorkType> response = await _supabase.GetWorkTypesAsync();
+        //        int expected = response.Count + 1;
+
+        //        //Act
+        //        id = await _supabase.CreateWorkTypeAsync(_testWorkType);
+
+        //        List<History> actual_res = await _supabase.GetHistoriesAsync();
+        //        int actual = actual_res.Count;
+
+        //        //Assert
+        //        Assert.AreEqual(expected, actual);
+        //    }
+        //    catch (Exception error)
+        //    {
+        //        Assert.Fail("Test Filed: " + error.Message);
+        //    }
+        //    finally
+        //    {
+        //        if (id != -1)
+        //        {
+        //            await _supabase.DeleteHistoryAsync(id);
+        //        }
+        //    }
+        //}
+
+        [TestMethod]
+        public async Task D03_TestUpdateWorkTypeAsync()
+        {
+            long id = -1;
+            try
+            {
+                //Arrange
+                id = await _supabase.CreateWorkTypeAsync(_testWorkType);
+
+                _testWorkType.Id = id;
+                _testWorkType.Names?.En = "New Test Name";
+                _testWorkType.Descriptions?.En = "New Test Description";
+
+                //Act
+                await _supabase.UpdateWorkTypeAsync(_testWorkType);
+                List<WorkType> res = await _supabase.GetWorkTypesAsync();
+                WorkType? actual = res.Find(x => x.Id == id);
+
+                //Assert
+                Assert.IsNotNull(actual);
+                Assert.AreEqual(_testWorkType.Names?.En, actual.Names?.En);
+                Assert.AreEqual(_testWorkType.Descriptions?.En, actual.Descriptions?.En);
+            }
+            catch (Exception error)
+            {
+                Assert.Fail("Test Filed: " + error.Message);
+            }
+            finally
+            {
+                if (id != -1)
+                {
+                    await _supabase.DeleteWorkTypeAsync(id);
                 }
             }
         }
