@@ -17,7 +17,7 @@ namespace Recorder.Core.Models
 
         [Column("work_type_descriptions")]
 
-        public Names? Descriptions { get; set; }
+        public Descriptions? Descriptions { get; set; }
     }
 
     [Table("work_type_names")]
