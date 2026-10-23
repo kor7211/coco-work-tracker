@@ -1,4 +1,5 @@
 ﻿using Supabase;
+using Supabase.Functions.Responses;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -183,6 +184,60 @@ namespace Recorder.Core.Models
         }
 
         /// <summary>
+        /// Create new work type.
+        /// Use prepared create_work_type function in db.
+        /// </summary>
+        /// <param name="workType">Model instance representing new work_type</param>
+        /// <returns>Created type's id</returns>
+        /// <exception cref="HttpRequestException">Thrown when api access failed</exception>
+        /// <exception cref="InvalidOperationException">Thrown when response's type is not long</exception>
+        public async Task<long> CreateWorkTypeAsync(WorkType workType)
+        {
+            var payload = new
+            {
+                names = workType.Names is null ? null : new
+                {
+                    en = workType.Names.En,
+                    ja = workType.Names.Ja
+                },
+
+                descriptions = workType.Descriptions is null ? null : new
+                {
+                    en = workType.Descriptions.En,
+                    ja = workType.Descriptions.Ja
+                }
+            };
+
+            var json = JsonSerializer.SerializeToElement(payload);
+
+            Supabase.Postgrest.Responses.BaseResponse response = await _supabase.Rpc(
+                "create_work_type",
+                new Dictionary<string, object>
+                {
+                    ["p_woek_type"] = json
+                }
+            );
+
+            if (!response.ResponseMessage.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException(
+                    $"CreateHistory failed: " +
+                    $"{response.ResponseMessage.StatusCode}, " +
+                    $"{response.Content}"
+                    );
+            }
+
+            if (!long.TryParse(response.Content, out long typeId))
+            {
+                throw new InvalidOperationException(
+                    $"Invalid history ID: {response.Content}"
+                );
+            }
+
+            return typeId;
+        }
+
+        /// <summary>
         /// Delete a record in work_types table and all related rows in other tables.
         /// If there is a history referring to the record's id, this will fail.
         /// </summary>
@@ -200,8 +255,8 @@ namespace Recorder.Core.Models
         /// Update pre-existing work type.
         /// </summary>
         /// <param name="workType">Edited work type</param>
-        /// <returns></returns>
-        public async Task Update(WorkType workType)
+        /// <returns>Task</returns>
+        public async Task UpdateWorkTypeAsync(WorkType workType)
         {
             ArgumentNullException.ThrowIfNull(workType);
             ArgumentNullException.ThrowIfNull(workType.Names);
