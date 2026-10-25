@@ -75,9 +75,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Resources\Styles\Button.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Views\CreateRecordPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

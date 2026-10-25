@@ -8,12 +8,12 @@
             InitializeComponent();
         }
 
-        public void OnListRecordsClicked(object sender, EventArgs e)
+        private void OnListRecordsClicked(object? sender, EventArgs e)
         {
 
         }
 
-        public void OnListTypesClicked(object sender, EventArgs e)
+        private void OnListTypesClicked(object? sender, EventArgs e)
         {
 
         }
