@@ -9,7 +9,6 @@
     <Color x:Key="TextOnPrimaryColor">#DCEDFF</Color>
     <Color x:Key="SecondaryColor">#562871</Color>
     <Color x:Key="TextOnSecondaryColor">#F1F2EB</Color>
-    <Color x:Key="SecondaryDarkText">#9880e5</Color>
     <Color x:Key="TertiaryColor">#04395E</Color>
 
     <Color x:Key="White">White</Color>
