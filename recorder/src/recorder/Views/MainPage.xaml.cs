@@ -8,14 +8,14 @@
             InitializeComponent();
         }
 
-        private void OnListRecordsClicked(object? sender, EventArgs e)
+        private async void OnListRecordsClicked(object? sender, EventArgs e)
         {
-
+            await Shell.Current.GoToAsync("///records");
         }
 
-        private void OnListTypesClicked(object? sender, EventArgs e)
+        private async void OnListTypesClicked(object? sender, EventArgs e)
         {
-
+            await Shell.Current.GoToAsync("///types");
         }
     }
 }
