@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Recorder.Controls.RecordCard">
+
+    <VerticalStackLayout>
+        <Label x:Name="TitleEnLabel"
+               Text="English Title" />
+        <Label x:Name="TitleJaLabel"
+               Text="English Title" />
+        
+        <Label x:Name="CommentEnLabel"
+               Text="English Comment" />
+        <Label x:Name="CommentJaLabel"
+               Text="English Comment" />
+
+        <Label x:Name="TypeLabel"
+               Text="Type" />
+
+        <Label x:Name="DurationLabel"
+               Text="0(min)" />
+
+        <Label x:Name="BreakLabel"
+               Text="0(min)" />
+
+        <Label x:Name="StartedLabel"
+               Text="01/01/2000" />
+
+        <Label x:Name="UploadedLabel"
+               Text="01/01/2000" />
+
+        <Label x:Name="TimezoneLabel"
+               Text="Japan/Tokyo" />
+
+        <!--images can be displayed here-->
+    </VerticalStackLayout>
+</ContentView>
