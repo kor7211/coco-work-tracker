@@ -16,5 +16,8 @@
         <Button x:Name="LoginButton"
                 Text="Login"
                 Clicked="OnLoginButtonClicked" />
+
+        <Label x:Name="ErrorMessageLabel"
+               Text="" />
     </VerticalStackLayout>
 </ContentPage>

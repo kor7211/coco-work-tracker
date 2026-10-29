@@ -22,6 +22,7 @@ namespace Recorder
 #endif
 
             builder.Services.AddSingleton<AppState>();
+            builder.Services.AddSingleton<AppShell>();
 
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<ListRecordPage>();

@@ -51,7 +51,7 @@ namespace Recorder
                 if (_window is not null)
                 {
                     _window.Page =
-                        _services.GetRequiredService<MainPage>();
+                        _services.GetRequiredService<AppShell>();
                 }
             }
             catch (Exception ex)
