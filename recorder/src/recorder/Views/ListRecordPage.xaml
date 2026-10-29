@@ -8,12 +8,16 @@
         Padding="30,0"
         Spacing="25">
             <Button Text="Home" 
-                Style="{StaticResource ButtonLarge}"
-                Clicked="OnHomeClicked"/>
+                    Style="{StaticResource ButtonLarge}"
+                    Clicked="OnHomeClicked"/>
 
             <Button Text="Work Types"
-                Style="{StaticResource ButtonMedium}" 
-                Clicked="OnListTypesClicked"/>
+                    Style="{StaticResource ButtonMedium}" 
+                    Clicked="OnListTypesClicked"/>
+
+            <Button Text="Reload"
+                    Style="{StaticResource ButtonMedium}"
+                    Clicked="OnReloadClicked" />
 
             <VerticalStackLayout x:Name="CardContainer">
 

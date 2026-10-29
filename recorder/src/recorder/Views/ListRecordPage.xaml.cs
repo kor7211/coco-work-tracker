@@ -8,14 +8,27 @@ public partial class ListRecordPage : ContentPage
 {
     private AppState _appState;
 
+    private SupabaseService Service { get; set; }
+
 	public ListRecordPage(AppState appState)
 	{
 		InitializeComponent();
 
         _appState = appState;
 
+        Service = new SupabaseService(_appState.GetClient());
+
         UpdateRecords();
 	}
+
+    private async Task GetLatestRecordsAsync()
+    {
+        List<History> response = await Service.GetHistoriesAsync();
+
+        _appState.Histories.Clear();
+
+        _appState.Histories.AddRange(response);
+    }
 
     private void UpdateRecords()
     {
@@ -40,6 +53,13 @@ public partial class ListRecordPage : ContentPage
 
             CardContainer.Children.Add(card);
         }
+    }
+
+    private async void OnReloadClicked(object? sender, EventArgs e)
+    {
+        await GetLatestRecordsAsync();
+
+        UpdateRecords();
     }
 
     private async void OnHomeClicked(object? sender, EventArgs e)
