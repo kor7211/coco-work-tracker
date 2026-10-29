@@ -78,6 +78,9 @@
 	  <MauiXaml Update="Controls\RecordCard.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Resources\Styles\Label.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Resources\Styles\Page.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

@@ -6,5 +6,6 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Resources/Styles/Button.xaml" />
         <ResourceDictionary Source="/Resources/Styles/Page.xaml" />
+        <ResourceDictionary Source="/Resources/Styles/Label.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
