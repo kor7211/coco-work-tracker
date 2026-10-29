@@ -8,11 +8,14 @@ namespace Recorder.Views
     {
         private bool _hasCheckedAuthentication = false;
         private AppState _appState;
-        public MainPage(AppState appState)
+        private AppShell _shell;
+        public MainPage(AppState appState, AppShell shell)
         {
             InitializeComponent();
 
             _appState = appState;
+
+            _shell = shell;
         }
 
         protected override async void OnAppearing()
@@ -27,7 +30,7 @@ namespace Recorder.Views
             if (!_appState.IsAuthenticated)
             {
                 await Navigation.PushAsync(
-                    new LoginPage(_appState));
+                    new LoginPage(_appState, _shell));
             }
         }
 

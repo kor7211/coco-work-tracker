@@ -7,11 +7,16 @@ namespace Recorder.Views;
 public partial class LoginPage : ContentPage
 {
 	private AppState _appState;
-	public LoginPage(AppState appState)
+
+	private AppShell _shell;
+	public LoginPage(AppState appState, AppShell shell)
 	{
 		InitializeComponent();
 
 		_appState = appState;
+
+		_shell = shell;
+		shell.IsPopEnabled = false;
 	}
 
 	private async void OnLoginButtonClicked(object sender, EventArgs e)
@@ -26,7 +31,10 @@ public partial class LoginPage : ContentPage
 
 		try
 		{
-			bool success = await _appState.Login(email, password);
+			await _appState.Login(email, password);
+
+			_shell.IsPopEnabled = true;
+
             await Navigation.PopAsync(true);
 
         } catch (Exception ex) {

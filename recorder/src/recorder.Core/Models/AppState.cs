@@ -24,33 +24,14 @@ namespace Recorder.Core.Models
         /// <param name="passward">Password</param>
         /// <returns>Success logging in returns true, otherwise false.</returns>
         /// <exception cref="NullReferenceException">Null Client thorws exception. Initialize AppState before login.</exception>
-        public async Task<bool> Login(string email, string passward)
+        public async Task Login(string email, string passward)
         {
             if (_supabase == null)
             {
                 throw new NullReferenceException("Supabase Client is not initialized. (Call AppState.Initialize(Client) first.)");
             }
 
-            try
-            {
-                Session? session = await _supabase.Auth.SignIn(email, passward);
-                if (session != null)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                throw ex;
-            } catch (InvalidCredentialException ex)
-            {
-                throw ex;
-            }
-            
+            await _supabase.Auth.SignIn(email, passward);
         }
 
         public Supabase.Gotrue.Session? Session => _supabase?.Auth.CurrentSession;
