@@ -7,9 +7,9 @@ using Supabase;
     {
     public class AppState
     {
-        private readonly Supabase.Client _supabase;
+        private Supabase.Client? _supabase;
 
-        public AppState(Supabase.Client supabase)
+        public void Initialize(Supabase.Client supabase)
         {
             _supabase = supabase;
         }
