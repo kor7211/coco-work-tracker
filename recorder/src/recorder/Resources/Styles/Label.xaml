@@ -8,7 +8,7 @@
 
     <Style TargetType="Label">
         <Setter Property="TextColor"
-                Value="{StaticResource TextOnPrimaryColor}" />
+                Value="{StaticResource TextOnBackgroundColor}" />
         <Setter Property="FontFamily"
                 Value="NunitoSans" />
         <Setter Property="FontSize"
@@ -21,7 +21,16 @@
         <Setter Property="FontFamily"
             Value="NunitoSans" />
         <Setter Property="FontSize"
-            Value="Medium" />
+            Value="Default" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="Headline">
+        <Setter Property="TextColor"
+        Value="{StaticResource TextHeadline}" />
+        <Setter Property="FontFamily"
+        Value="NunitoSans" />
+        <Setter Property="FontSize"
+        Value="Header" />
     </Style>
 
 </ResourceDictionary>

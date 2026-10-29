@@ -4,7 +4,8 @@
              x:Class="Recorder.Views.LoginPage"
              Title="Login">
     <VerticalStackLayout>
-        <Label Text="Login" />
+        <Label Text="Login" 
+               Style="{StaticResource Headline}"/>
 
         <Entry x:Name="EmailEntry"
                Placeholder="Enter Email" />
@@ -18,6 +19,7 @@
                 Clicked="OnLoginButtonClicked" />
 
         <Label x:Name="ErrorMessageLabel"
-               Text="" />
+               Text="" 
+               Style="{StaticResource Error}"/>
     </VerticalStackLayout>
 </ContentPage>

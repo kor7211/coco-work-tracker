@@ -5,16 +5,16 @@
     <Style TargetType="Page" ApplyToDerivedTypes="True">
         <Setter Property="Padding" Value="0"/>
         <Setter Property="BackgroundColor" 
-                Value="{StaticResource PrimaryColor}" />
+                Value="{StaticResource BackgroundColor}" />
     </Style>
 
     <Style TargetType="Shell" ApplyToDerivedTypes="True">
         <Setter Property="Shell.BackgroundColor" 
-                Value="{StaticResource SecondaryColor}" />
+                Value="{StaticResource BackgroundShadeColor}" />
         <Setter Property="Shell.ForegroundColor" 
-                Value="{StaticResource TextOnSecondaryColor}" />
+                Value="{StaticResource TextOnBackgroundColor}" />
         <Setter Property="Shell.TitleColor" 
-                Value="{StaticResource TextOnSecondaryColor}" />
+                Value="{StaticResource TextOnBackgroundColor}" />
         <Setter Property="Shell.DisabledColor" 
                 Value="{StaticResource Black}" />
         <Setter Property="Shell.UnselectedColor" 

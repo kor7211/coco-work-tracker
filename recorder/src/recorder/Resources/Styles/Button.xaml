@@ -7,9 +7,9 @@
         <Setter Property="Padding" Value="16,10" />
         <Setter Property="CornerRadius" Value="8" />
         <Setter Property="BackgroundColor" 
-                Value="{StaticResource SecondaryColor}" />
+                Value="{StaticResource PrimaryColor}" />
         <Setter Property="TextColor" 
-                Value="{StaticResource TextOnSecondaryColor}" />
+                Value="{StaticResource TextOnPrimaryColor}" />
     </Style>
 
     <Style x:Key="ButtonMedium" TargetType="Button">
