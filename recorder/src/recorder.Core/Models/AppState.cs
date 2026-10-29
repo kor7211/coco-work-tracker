@@ -11,6 +11,11 @@ namespace Recorder.Core.Models
     {
         private Supabase.Client? _supabase;
 
+        public Supabase.Client? GetClient()
+        {
+            return _supabase;
+        }
+
         public void Initialize(Supabase.Client supabase)
         {
             _supabase = supabase;
@@ -39,5 +44,9 @@ namespace Recorder.Core.Models
         public bool IsAuthenticated => Session is not null;
 
         public string? UserId => Session?.User?.Id;
+
+        public readonly List<History> Histories = new List<History>();
+
+        public readonly List<WorkType> WorkTypes = new List<WorkType>();
     }
 }

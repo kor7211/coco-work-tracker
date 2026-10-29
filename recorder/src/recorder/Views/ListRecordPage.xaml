@@ -14,6 +14,10 @@
             <Button Text="Work Types"
                 Style="{StaticResource ButtonMedium}" 
                 Clicked="OnListTypesClicked"/>
+
+            <VerticalStackLayout x:Name="CardContainer">
+
+            </VerticalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

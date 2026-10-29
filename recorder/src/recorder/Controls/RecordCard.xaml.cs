@@ -35,7 +35,7 @@ public partial class RecordCard : ContentView
 		History = history;
 	}
 
-	private void UpdateCard()
+	public void UpdateCard()
 	{
         TitleEnLabel.Text = TitleEn;
 

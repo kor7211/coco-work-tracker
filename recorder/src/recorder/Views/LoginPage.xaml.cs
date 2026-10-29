@@ -32,8 +32,18 @@ public partial class LoginPage : ContentPage
 		try
 		{
 			await _appState.Login(email, password);
+			
+			// if success
 
-			_shell.IsPopEnabled = true;
+			Client? client = _appState.GetClient();
+			if (client == null) 
+				throw new NullReferenceException(nameof(client));
+            SupabaseService service = new SupabaseService(client);
+
+			_appState.Histories.AddRange(await service.GetHistoriesAsync());
+            _appState.WorkTypes.AddRange(await service.GetWorkTypesAsync());
+
+            _shell.IsPopEnabled = true;
 
             await Navigation.PopAsync(true);
 
