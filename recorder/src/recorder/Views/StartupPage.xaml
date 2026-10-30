@@ -4,7 +4,8 @@
              x:Class="Recorder.Views.StartupPage"
              Title="Loading...">
     <VerticalStackLayout>
-        <ActivityIndicator IsRunning="True" />
+        <ActivityIndicator IsRunning="True" 
+                           Color="{StaticResource IndicatorColor}"/>
         <Label Text="Now Loading..." />
     </VerticalStackLayout>
 </ContentPage>

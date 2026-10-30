@@ -17,9 +17,12 @@
 
     <Color x:Key="TextHeadline">#FBF5F3</Color>
     <Color x:Key="TextError">#E84855</Color>
+    <Color x:Key="TextSuccess">#42E2B8</Color>
 
     <Color x:Key="DisabledColor">#C8C8C8</Color>
     <Color x:Key="TextOnDisabledColor">#6E6E6E</Color>
+
+    <Color x:Key="IndicatorColor">#275DAD</Color>
 
     <Color x:Key="White">White</Color>
     <Color x:Key="Black">Black</Color>

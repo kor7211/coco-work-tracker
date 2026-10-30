@@ -44,7 +44,10 @@ public partial class LoginPage : ContentPage
 
 		try
 		{
-			await _appState.Login(email, password);
+			LoadingIndicator.IsRunning = true;
+            LoadingIndicator.IsVisible = true;
+
+            await _appState.Login(email, password);
 			
 			// if success
 
@@ -64,7 +67,11 @@ public partial class LoginPage : ContentPage
 			string message = "Error: Fail to login. Please try different password or retry later.\n" +
 				$"Error Detail: {ex.Message}";
 			DisplayError(message);
-		}
+		} finally
+		{
+            LoadingIndicator.IsRunning = false;
+            LoadingIndicator.IsVisible = false;
+        }
 	}
 
 	private bool ValidateEmail(string email)

@@ -20,6 +20,15 @@
             Value="Default" />
     </Style>
 
+    <Style TargetType="Label" x:Key="Success">
+        <Setter Property="TextColor"
+            Value="{StaticResource TextSuccess}" />
+        <Setter Property="FontFamily"
+            Value="NunitoSans" />
+        <Setter Property="FontSize"
+            Value="Default" />
+    </Style>
+
     <Style TargetType="Label" x:Key="Headline">
         <Setter Property="TextColor"
         Value="{StaticResource TextHeadline}" />

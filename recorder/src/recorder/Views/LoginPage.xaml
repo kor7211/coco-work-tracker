@@ -3,6 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Recorder.Views.LoginPage">
     <VerticalStackLayout>
+        <ActivityIndicator x:Name="LoadingIndicator"
+                           IsRunning="False"
+                           IsVisible="False"
+                           Color="{StaticResource IndicatorColor}" />
+
         <Label Text="Login" 
                Style="{StaticResource Headline}"/>
 
@@ -17,6 +22,7 @@
 
         <Button x:Name="LoginButton"
                 Text="Login"
+                Style="{StaticResource ButtonLarge}"
                 Clicked="OnLoginButtonClicked" />
 
         <Label x:Name="ErrorMessageLabel"

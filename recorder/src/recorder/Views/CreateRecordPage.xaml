@@ -3,6 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Recorder.Views.CreateRecordPage">
     <VerticalStackLayout>
+        <ActivityIndicator x:Name="LoadingIndicator"
+                   IsRunning="False"
+                   IsVisible="False"
+                   Color="{StaticResource IndicatorColor}" />
+        
         <Entry x:Name="TitleEnEntry"
                Placeholder="Title En" />
         <Entry x:Name="TitleJaEntry"
@@ -33,5 +38,9 @@
         <Label x:Name="ErrorLabel"
                Text=""
                Style="{StaticResource Error}" />
+
+        <Label x:Name="SuccessLabel"
+               Text=""
+               Style="{StaticResource Success}" />
     </VerticalStackLayout>
 </ContentPage>

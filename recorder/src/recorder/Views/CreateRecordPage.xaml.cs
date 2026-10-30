@@ -9,11 +9,15 @@ public partial class CreateRecordPage : ContentPage
 	private readonly AppState _appState;
 
     private readonly SupabaseService _service;
-	public CreateRecordPage(AppState appState)
+
+    private readonly AppShell _shell;
+	public CreateRecordPage(AppState appState, AppShell shell)
 	{
 		InitializeComponent();
 
 		_appState = appState;
+
+        _shell = shell;
 
         _service = new SupabaseService(appState.Supabase);
 
@@ -48,6 +52,7 @@ public partial class CreateRecordPage : ContentPage
 
     private async void OnCreateClicked(object sender, EventArgs e)
     {
+        ResetDisplay();
         CreateButton.IsEnabled = false;
         //Validation
         try
@@ -95,13 +100,17 @@ public partial class CreateRecordPage : ContentPage
         //Try Create
         try
         {
+            LoadingIndicator.IsRunning = true;
+            LoadingIndicator.IsVisible = true;
+            _shell.IsPopEnabled = false;
+
             long id = await _service.CreateHistoryAsync(history);
 
             history.Id = id;
 
             _appState.Histories.Add(history);
 
-            DisplayError("");
+            DisplaySuccess("Success: Record created.");
         } catch (Exception ex)
         {
             DisplayError($"Error: Fail to create record.\n" +
@@ -109,12 +118,29 @@ public partial class CreateRecordPage : ContentPage
         } finally
         {
             CreateButton.IsEnabled = true;
+            _shell.IsPopEnabled = true;
+
+            LoadingIndicator.IsRunning = false;
+            LoadingIndicator.IsVisible = false;
         }
+    }
+
+    private void ResetDisplay()
+    {
+        ErrorLabel.Text = "";
+        SuccessLabel.Text = "";
     }
 
     private void DisplayError(string message)
     {
+        ResetDisplay();
         ErrorLabel.Text = message;
+    }
+
+    private void DisplaySuccess(string message)
+    {
+        ResetDisplay();
+        SuccessLabel.Text = message;
     }
 
     //Validations

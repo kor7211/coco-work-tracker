@@ -6,15 +6,19 @@ namespace Recorder.Views;
 
 public partial class ListRecordPage : ContentPage
 {
-    private AppState _appState;
+    private readonly AppState _appState;
 
-    private SupabaseService Service { get; set; }
+    private readonly AppShell _shell;
 
-	public ListRecordPage(AppState appState)
+    private readonly SupabaseService Service;
+
+	public ListRecordPage(AppState appState, AppShell shell)
 	{
 		InitializeComponent();
 
         _appState = appState;
+
+        _shell = shell;
 
         Service = new SupabaseService(_appState.Supabase);
 
@@ -57,7 +61,7 @@ public partial class ListRecordPage : ContentPage
 
     private async void OnCreateClicked(object? sender, EventArgs e)
     {
-        await Navigation.PushAsync(new CreateRecordPage(_appState));
+        await Navigation.PushAsync(new CreateRecordPage(_appState, _shell));
     }
 
 
