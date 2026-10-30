@@ -1,5 +1,6 @@
 using Recorder.Core.Models;
 using Supabase;
+using Supabase.Gotrue;
 using System.ComponentModel.DataAnnotations;
 
 namespace Recorder.Views;
@@ -16,10 +17,22 @@ public partial class LoginPage : ContentPage
 		_appState = appState;
 
 		_shell = shell;
-		shell.IsPopEnabled = false;
-	}
 
-	private async void OnLoginButtonClicked(object sender, EventArgs e)
+        _shell.IsPopEnabled = false;
+    }
+
+    protected override async void OnAppearing()
+	{
+        if (_appState.IsAuthenticated)
+        {
+            _shell.IsPopEnabled = true;
+
+            await Navigation.PopAsync(true);
+        }
+    }
+
+
+    private async void OnLoginButtonClicked(object sender, EventArgs e)
 	{
 		string email = EmailEntry.Text;
 
@@ -35,7 +48,7 @@ public partial class LoginPage : ContentPage
 			
 			// if success
 
-			Client? client = _appState.GetClient();
+			Supabase.Client? client = _appState.GetClient();
 			if (client == null) 
 				throw new NullReferenceException(nameof(client));
             SupabaseService service = new SupabaseService(client);

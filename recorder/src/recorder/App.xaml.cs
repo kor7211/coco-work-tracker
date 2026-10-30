@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Recorder.Core.Models;
 using Recorder.Views;
+using Supabase;
 
 namespace Recorder
 {
@@ -40,10 +41,11 @@ namespace Recorder
 
             try
             {
-                var client =
-                    await SupabaseClientGenerator.GetClientAsync();
+                Client client = _services.GetRequiredService<Client>();
 
-                var appState =
+                await SupabaseClientGenerator.InitializeSupabaseAsync(client);
+
+                AppState appState =
                     _services.GetRequiredService<AppState>();
 
                 appState.Initialize(client);
