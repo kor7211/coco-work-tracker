@@ -8,11 +8,13 @@
                Style="{StaticResource Headline}"/>
 
         <Entry x:Name="EmailEntry"
-               Placeholder="Enter Email" />
+               Placeholder="Enter Email" 
+               Keyboard="Email" />
 
         <Entry x:Name="PasswordEntry"
                Placeholder="Enter Password"
-               IsPassword="True" />
+               IsPassword="True" 
+               Keyboard="Password" />
 
         <Button x:Name="LoginButton"
                 Text="Login"

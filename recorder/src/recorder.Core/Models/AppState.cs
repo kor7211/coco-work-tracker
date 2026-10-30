@@ -9,16 +9,11 @@ namespace Recorder.Core.Models
     {
     public class AppState
     {
-        private Supabase.Client? _supabase;
-
-        public Supabase.Client? GetClient()
-        {
-            return _supabase;
-        }
+        public Supabase.Client? Supabase { get; private set; }
 
         public void Initialize(Supabase.Client supabase)
         {
-            _supabase = supabase;
+            Supabase = supabase;
         }
 
         /// <summary>
@@ -31,15 +26,15 @@ namespace Recorder.Core.Models
         /// <exception cref="NullReferenceException">Null Client thorws exception. Initialize AppState before login.</exception>
         public async Task Login(string email, string passward)
         {
-            if (_supabase == null)
+            if (Supabase == null)
             {
                 throw new NullReferenceException("Supabase Client is not initialized. (Call AppState.Initialize(Client) first.)");
             }
 
-            await _supabase.Auth.SignIn(email, passward);
+            await Supabase.Auth.SignIn(email, passward);
         }
 
-        public Supabase.Gotrue.Session? Session => _supabase?.Auth.CurrentSession;
+        public Supabase.Gotrue.Session? Session => Supabase?.Auth.CurrentSession;
 
         public bool IsAuthenticated => Session is not null;
 

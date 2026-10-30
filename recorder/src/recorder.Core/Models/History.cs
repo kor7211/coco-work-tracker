@@ -41,9 +41,6 @@ namespace Recorder.Core.Models
     [Table("titles")]
     public class Titles : BaseModel
     {
-        [Column("history_id")]
-        public long HistoryId { get; set; }
-
         [Column("en")]
         public string En { get; set; }
 
@@ -54,9 +51,6 @@ namespace Recorder.Core.Models
     [Table("comments")]
     public class Comments : BaseModel
     {
-        [Column("history_id")]
-        public long HistoryId { get; set; }
-
         [Column("en")]
         public string En { get; set; }
 

@@ -19,6 +19,10 @@
                     Style="{StaticResource ButtonMedium}"
                     Clicked="OnReloadClicked" />
 
+            <Button Text="Create"
+                    Style="{StaticResource ButtonLarge}"
+                    Clicked="OnCreateClicked" />
+
             <VerticalStackLayout x:Name="CardContainer">
 
             </VerticalStackLayout>

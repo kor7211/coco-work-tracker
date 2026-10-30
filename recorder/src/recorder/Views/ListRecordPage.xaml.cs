@@ -16,7 +16,7 @@ public partial class ListRecordPage : ContentPage
 
         _appState = appState;
 
-        Service = new SupabaseService(_appState.GetClient());
+        Service = new SupabaseService(_appState.Supabase);
 
         UpdateRecords();
 	}
@@ -54,6 +54,12 @@ public partial class ListRecordPage : ContentPage
             CardContainer.Children.Add(card);
         }
     }
+
+    private async void OnCreateClicked(object? sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new CreateRecordPage(_appState));
+    }
+
 
     private async void OnReloadClicked(object? sender, EventArgs e)
     {

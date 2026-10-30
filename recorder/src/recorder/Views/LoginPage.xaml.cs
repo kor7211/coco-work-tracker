@@ -48,7 +48,7 @@ public partial class LoginPage : ContentPage
 			
 			// if success
 
-			Supabase.Client? client = _appState.GetClient();
+			Supabase.Client? client = _appState.Supabase;
 			if (client == null) 
 				throw new NullReferenceException(nameof(client));
             SupabaseService service = new SupabaseService(client);
