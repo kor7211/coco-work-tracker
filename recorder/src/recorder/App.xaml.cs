@@ -2,6 +2,7 @@
 using Recorder.Core.Models;
 using Recorder.Views;
 using Supabase;
+using Supabase.Realtime.Exceptions;
 
 namespace Recorder
 {
@@ -56,12 +57,25 @@ namespace Recorder
                         _services.GetRequiredService<AppShell>();
                 }
             }
+            catch (RealtimeException ex)
+            {
+                if (_window?.Page is Page page)
+                {
+                    await page.DisplayAlertAsync(
+                        "Realtime Connection Error:\n" +
+                        "Supabase server is currently unreachable. Check server condition.",
+                        ex.Message,
+                        "OK"
+                    );
+                }
+            }
             catch (Exception ex)
             {
                 if (_window?.Page is Page page)
                 {
                     await page.DisplayAlertAsync(
-                        "Initialization Error",
+                        "Initialization Error:\n" +
+                        $"Detail: {ex.Message}",
                         ex.Message,
                         "OK"
                     );
