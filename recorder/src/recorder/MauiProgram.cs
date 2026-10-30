@@ -18,6 +18,7 @@ namespace Recorder
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                     fonts.AddFont("NunitoSans-VariableFont.ttf", "NunitoSans");
+                    fonts.AddFont("Anton-Regular.ttf", "AntonRegular");
                 });
 
 #if DEBUG
