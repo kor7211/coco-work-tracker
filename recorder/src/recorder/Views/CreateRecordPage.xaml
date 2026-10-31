@@ -29,6 +29,26 @@
         <TimePicker x:Name="StartedTimePicker" />
         <Picker x:Name="TimezonePicker" />
         <!--Image-->
+        <Button x:Name="AddImageButton"
+                Text="Add Image"
+                Style="{StaticResource ButtonSmall}"
+                Clicked="OnAddImageClicked" />
+        <CollectionView x:Name="ImageContainer">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Entry Text="{Binding Title}"
+                               Placeholder="Enter image name"
+                               VerticalOptions="Center" />
+
+                        <Button Grid.Column="1"
+                                Text="Remove"
+                                Style="{StaticResource ButtonSmall}"
+                                Clicked="OnRemoveImageClicked" />   
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
         <Button x:Name="CreateButton"
                 Text="Create"

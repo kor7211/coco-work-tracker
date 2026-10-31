@@ -1,6 +1,8 @@
 using Recorder.Core.Models;
 using Recorder.Core.Services;
+using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace Recorder.Views;
 
@@ -10,7 +12,17 @@ public partial class CreateRecordPage : ContentPage
 
     private readonly SupabaseService _service;
 
+    private readonly ImageStorageService _imageService;
+
     private readonly AppShell _shell;
+
+    private bool IsLoading = false;
+
+    private static string[] ALLOWED_IMAGE_TYPE = ["image/jpg", "image/jpeg", "image/png"];
+
+    private const long MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
+
+    public ObservableCollection<ImageFileResult> Images = new ObservableCollection<ImageFileResult>();
 	public CreateRecordPage(AppState appState, AppShell shell)
 	{
 		InitializeComponent();
@@ -21,9 +33,12 @@ public partial class CreateRecordPage : ContentPage
 
         _service = new SupabaseService(appState.Supabase);
 
+        _imageService = new ImageStorageService(appState.Supabase);
+
         UpdateTypePicker();
         SetDatetimeNow();
         UpdateTimezonePicker();
+        ImageContainer.ItemsSource = Images;
 	}
 
     private void UpdateTimezonePicker()
@@ -50,10 +65,56 @@ public partial class CreateRecordPage : ContentPage
         StartedTimePicker.Time = now.TimeOfDay;
     }
 
+    private async void OnAddImageClicked(object sender, EventArgs e)
+    {
+        if (IsLoading) return;
+
+        PickOptions options = new PickOptions()
+        {
+            PickerTitle = "Select images",
+            FileTypes = FilePickerFileType.Images
+        };
+
+        IEnumerable<FileResult?> result = await FilePicker.Default.PickMultipleAsync(options);
+
+        foreach (FileResult? file in  result)
+        {
+            if (file == null)
+                continue;
+            
+            Images.Add(
+                new ImageFileResult()
+                {
+                    FileResult = file,
+                    Title = file.FileName
+                });
+        }
+    }
+
+    private void OnRemoveImageClicked(object? sender, EventArgs e)
+    {
+        if (IsLoading) return;
+
+        Button? button = sender as Button;
+        if (button == null) return;
+
+        ImageFileResult? file = button.BindingContext as ImageFileResult;
+        if (file == null) return;
+
+        Images.Remove(file);
+    }
+
     private async void OnCreateClicked(object sender, EventArgs e)
     {
+        if (IsLoading) return;
+
         ResetDisplay();
-        CreateButton.IsEnabled = false;
+        PreventInput();
+        await TryCreateRecord();
+        EnableInput();
+    }
+    private async Task TryCreateRecord()
+    {
         //Validation
         try
         {
@@ -65,15 +126,26 @@ public partial class CreateRecordPage : ContentPage
             ValidateIsNotNull(StartedDatePicker.Date, "Started Date");
             ValidateIsNotNull(StartedTimePicker.Time, "Started Time");
             ValidateTimezone(TimezonePicker.SelectedItem as TimeZoneInfo);
-        } catch (ArgumentException ex)
+            foreach (ImageFileResult file in Images)
+            {
+                await ValidateImage(file);
+            }
+        }
+        catch (ArgumentException ex)
         {
             DisplayError(ex.Message);
             return;
-        } finally
-        {
-            CreateButton.IsEnabled = true;
         }
         //Create new History
+        List<ImagePath> images = new List<ImagePath>();
+        foreach (ImageFileResult file in Images)
+        {
+            ImagePath image = new ImagePath()
+            {
+                Path = file.PathInStorage
+            };
+            images.Add(image);
+        }
         History history = new History()
         {
             Titles = new Titles()
@@ -95,33 +167,32 @@ public partial class CreateRecordPage : ContentPage
                 (TimeZoneInfo)TimezonePicker.SelectedItem),
             Uploaded = DateTimeOffset.UtcNow,
             Timezone = TimeZoneService.GetIanaTimeZoneId(TimezonePicker.SelectedItem as TimeZoneInfo),
+            ImagePaths = images
         };
 
         //Try Create
         try
         {
-            LoadingIndicator.IsRunning = true;
-            LoadingIndicator.IsVisible = true;
-            _shell.IsPopEnabled = false;
-
             long id = await _service.CreateHistoryAsync(history);
 
             history.Id = id;
 
             _appState.Histories.Add(history);
 
+            foreach (ImageFileResult imageFileResult in Images)
+            {
+                string path = await _imageService.UploadImageAsync(
+                    imageFileResult.FileResult.FullPath,
+                    imageFileResult.PathInStorage);
+            }
+            
+
             DisplaySuccess("Success: Record created.");
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             DisplayError($"Error: Fail to create record.\n" +
                 $"Detail: {ex.Message}");
-        } finally
-        {
-            CreateButton.IsEnabled = true;
-            _shell.IsPopEnabled = true;
-
-            LoadingIndicator.IsRunning = false;
-            LoadingIndicator.IsVisible = false;
         }
     }
 
@@ -141,6 +212,26 @@ public partial class CreateRecordPage : ContentPage
     {
         ResetDisplay();
         SuccessLabel.Text = message;
+    }
+
+    private void EnableInput()
+    {
+        CreateButton.IsEnabled = true;
+        IsLoading = false;
+        _shell.IsPopEnabled = true;
+
+        LoadingIndicator.IsRunning = false;
+        LoadingIndicator.IsVisible = false;
+    }
+
+    private void PreventInput()
+    {
+        CreateButton.IsEnabled = false;
+        _shell.IsPopEnabled = false;
+        IsLoading = true;
+
+        LoadingIndicator.IsRunning = true;
+        LoadingIndicator.IsVisible = true;
     }
 
     //Validations
@@ -191,6 +282,50 @@ public partial class CreateRecordPage : ContentPage
         ValidateIsNotNull(timeZone, "Timezone");
         TimeZoneService.GetIanaTimeZoneId(timeZone);
     }
+
+    private async Task ValidateImage(ImageFileResult image)
+    {
+        //Validate image title
+        if (Regex.IsMatch(
+            image.Title,
+            @"[^a-zA-Z0-9_ -]"
+        ))
+        {
+            throw new ArgumentException(
+                $"Error: {image.Title} is an invalid title.\n" +
+                "Only alphabet, numbers, underscores, hyphens and spaces are acceptable."
+            );
+        }
+
+        FileResult file = image.FileResult;
+        if (!ALLOWED_IMAGE_TYPE.Contains(file.ContentType))
+        {
+            throw new ArgumentException($"Error: {file.FileName} is invalid image type.\n" +
+                $"Only .jpg / .jpeg / .png is supported.");
+        }
+        using var stream = await file.OpenReadAsync();
+
+        long fileSizeInBytes = stream.Length;
+
+        if (fileSizeInBytes > MAX_FILE_SIZE)
+        {
+            throw new ArgumentException($"Error: {file.FileName} is over limited file size.\n" +
+                $"Maximum {(MAX_FILE_SIZE / 1024.0) / 1024.0} Mb is allowed.");
+        }
+
+    }
+}
+public class ImageFileResult
+{
+
+    public FileResult FileResult { get; set; }
+
+    public string Title { get; set; } // Changes on this from c# will not be effected to UI on live. Use INotifyPropertyChangeed is needed.
+
+    public string PathInStorage => ImageStorageService.GenerateImagePath(
+                    this.Title,
+                    this.FileResult.ContentType.Split('/')[1]
+                    );
 }
 
 public class WorkTypeDisplayConverter : IValueConverter
