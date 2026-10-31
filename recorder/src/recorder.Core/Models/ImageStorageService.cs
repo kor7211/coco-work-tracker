@@ -85,5 +85,13 @@ namespace Recorder.Core.Models
 
             return response;
         }
+
+        public async Task DeleteImageAsync(
+            string path)
+        {
+            var response = await _supabase.Storage
+                .From("history-images")
+                .Remove(path);
+        }
     }
 }
