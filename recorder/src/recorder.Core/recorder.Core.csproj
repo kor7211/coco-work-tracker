@@ -13,8 +13,4 @@
 		<PackageReference Include="Supabase" Version="8.3.1" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Controllers\" />
-	</ItemGroup>
-
 </Project>

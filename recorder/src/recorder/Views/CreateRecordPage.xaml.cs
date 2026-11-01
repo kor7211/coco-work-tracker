@@ -1,8 +1,9 @@
+using Recorder.Controllers;
+using Recorder.Core.Controllers;
 using Recorder.Core.Models;
 using Recorder.Core.Services;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Text.RegularExpressions;
 
 namespace Recorder.Views;
 
@@ -10,19 +11,15 @@ public partial class CreateRecordPage : ContentPage
 {
 	private readonly AppState _appState;
 
-    private readonly SupabaseService _service;
-
-    private readonly ImageStorageService _imageService;
-
     private readonly AppShell _shell;
+
+    private readonly HistoryManager _historyManager;
 
     private bool IsLoading = false;
 
-    private static string[] ALLOWED_IMAGE_TYPE = ["image/jpg", "image/jpeg", "image/png"];
+    public ObservableCollection<ImageFileInfo?> SelectedImageCollection { get; } = 
+        new();
 
-    private const long MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
-
-    public ObservableCollection<ImageFileResult> Images = new ObservableCollection<ImageFileResult>();
 	public CreateRecordPage(AppState appState, AppShell shell)
 	{
 		InitializeComponent();
@@ -31,14 +28,12 @@ public partial class CreateRecordPage : ContentPage
 
         _shell = shell;
 
-        _service = new SupabaseService(appState.Supabase);
-
-        _imageService = new ImageStorageService(appState.Supabase);
+        _historyManager = new HistoryManager(_appState);
 
         UpdateTypePicker();
         SetDatetimeNow();
         UpdateTimezonePicker();
-        ImageContainer.ItemsSource = Images;
+        ImageContainer.ItemsSource = SelectedImageCollection;
 	}
 
     private void UpdateTimezonePicker()
@@ -75,19 +70,22 @@ public partial class CreateRecordPage : ContentPage
             FileTypes = FilePickerFileType.Images
         };
 
-        IEnumerable<FileResult?> result = await FilePicker.Default.PickMultipleAsync(options);
+        IEnumerable<FileResult?>? result = await FilePicker.Default.PickMultipleAsync(options);
 
+        if (result ==  null) return;
+        if (!result.Any()) return;
+        
         foreach (FileResult? file in  result)
         {
             if (file == null)
                 continue;
-            
-            Images.Add(
-                new ImageFileResult()
-                {
-                    FileResult = file,
-                    Title = file.FileName
-                });
+
+            SelectedImageCollection.Add(
+                new ImageFileInfo(
+                    file.FileName,
+                    file.FullPath,
+                    file.ContentType
+                ));
         }
     }
 
@@ -98,102 +96,62 @@ public partial class CreateRecordPage : ContentPage
         Button? button = sender as Button;
         if (button == null) return;
 
-        ImageFileResult? file = button.BindingContext as ImageFileResult;
+        ImageFileInfo? file = button.BindingContext as ImageFileInfo;
         if (file == null) return;
 
-        Images.Remove(file);
+        SelectedImageCollection.Remove(file);
     }
 
     private async void OnCreateClicked(object sender, EventArgs e)
     {
         if (IsLoading) return;
 
+        IsLoading = true;
+
         ResetDisplay();
         PreventInput();
-        await TryCreateRecord();
-        EnableInput();
-    }
-    private async Task TryCreateRecord()
-    {
-        //Validation
+
         try
         {
-            ValidateIsNotEmpty(TitleEnEntry.Text, "English Title");
-            ValidateIsNotEmpty(TitleJaEntry.Text, "Japanese Title");
-            ValidateIsNotNull(TypePicker.SelectedItem, "Type");
-            ValidateIsPositiveNumber(DurationEntry.Text, "Duration");
-            ValidateIsZeroOrPositiveNumber(BreakEntry.Text, "Break");
-            ValidateIsNotNull(StartedDatePicker.Date, "Started Date");
-            ValidateIsNotNull(StartedTimePicker.Time, "Started Time");
-            ValidateTimezone(TimezonePicker.SelectedItem as TimeZoneInfo);
-            foreach (ImageFileResult file in Images)
-            {
-                await ValidateImage(file);
-            }
-        }
-        catch (ArgumentException ex)
-        {
-            DisplayError(ex.Message);
-            return;
-        }
-        //Create new History
-        List<ImagePath> images = new List<ImagePath>();
-        foreach (ImageFileResult file in Images)
-        {
-            ImagePath image = new ImagePath()
-            {
-                Path = file.PathInStorage
-            };
-            images.Add(image);
-        }
-        History history = new History()
-        {
-            Titles = new Titles()
-            {
-                En = TitleEnEntry.Text,
-                Ja = TitleJaEntry.Text
-            },
-            Comments = new Comments()
-            {
-                En = CommentEnEntry.Text,
-                Ja = CommentJaEntry.Text
-            },
-            TypeId = ((WorkType)TypePicker.SelectedItem).Id,
-            DurationMinutes = int.Parse(DurationEntry.Text),
-            BreakMinutes = int.Parse(BreakEntry.Text),
-            Started = TimeZoneService.GetUtcTime(
-                (DateTime)StartedDatePicker.Date,
-                (TimeSpan)StartedTimePicker.Time,
-                (TimeZoneInfo)TimezonePicker.SelectedItem),
-            Uploaded = DateTimeOffset.UtcNow,
-            Timezone = TimeZoneService.GetIanaTimeZoneId(TimezonePicker.SelectedItem as TimeZoneInfo),
-            ImagePaths = images
-        };
-
-        //Try Create
-        try
-        {
-            long id = await _service.CreateHistoryAsync(history);
-
-            history.Id = id;
-
-            _appState.Histories.Add(history);
-
-            foreach (ImageFileResult imageFileResult in Images)
-            {
-                string path = await _imageService.UploadImageAsync(
-                    imageFileResult.FileResult.FullPath,
-                    imageFileResult.PathInStorage);
-            }
-            
+            await TryCreateRecord();
 
             DisplaySuccess("Success: Record created.");
-        }
-        catch (Exception ex)
+        } catch (ArgumentException ex)
         {
-            DisplayError($"Error: Fail to create record.\n" +
-                $"Detail: {ex.Message}");
+            //Catch validation error
+            DisplayError(ex.Message);
+        } catch (Exception ex)
+        {
+            //Carch other errors. Expected as api thrown error.
+            DisplayError(ex.Message);
         }
+        finally
+        {
+            IsLoading = false;
+            EnableInput();
+        }        
+    }
+
+    private async Task TryCreateRecord()
+    {
+        // Pass user inout to controller
+        bool isImageAttempted = SelectedImageCollection.Count() > 0;
+
+        await _historyManager.CreateHistoryAsync(
+            TitleEnEntry.Text,
+            TitleJaEntry.Text,
+            CommentEnEntry.Text,
+            CommentJaEntry.Text,
+            TypePicker.SelectedItem as WorkType,
+            DurationEntry.Text,
+            BreakEntry.Text,
+            StartedDatePicker.Date,
+            StartedTimePicker.Time,
+            TimezonePicker.SelectedItem as TimeZoneInfo,
+            isImageAttempted?
+                SelectedImageCollection.ToList():
+                null
+            );
     }
 
     private void ResetDisplay()
@@ -233,99 +191,6 @@ public partial class CreateRecordPage : ContentPage
         LoadingIndicator.IsRunning = true;
         LoadingIndicator.IsVisible = true;
     }
-
-    //Validations
-    private void ValidateIsNotEmpty(string? value, string param)
-    {
-        if (string.IsNullOrEmpty(value))
-        {
-            throw new ArgumentException($"Error: {param} must not be empty.");
-        }
-    }
-    private void ValidateIsNotNull(object? value, string param)
-    {
-        if (value == null)
-        {
-            throw new ArgumentException($"Error: {param} must be chosen.");
-        }
-    }
-    private void ValidateIsZeroOrPositiveNumber(string? value, string param)
-    {
-        if (int.TryParse(value, out int number))
-        {
-            if (number < 0)
-            {
-                throw new ArgumentException($"Error: {param} must be zero or positive number.");
-            }
-        }
-        else
-        {
-            throw new ArgumentException($"Error: {param} must be nutural number.");
-        }
-    }
-    private void ValidateIsPositiveNumber(string? value, string param)
-    {
-        if(int.TryParse(value, out int number))
-        {
-            if (number <= 0)
-            {
-                throw new ArgumentException($"Error: {param} must be positive number.");
-            }
-        } else
-        {
-            throw new ArgumentException($"Error: {param} must be nutural number.");
-        }
-    }
-
-    private void ValidateTimezone(TimeZoneInfo? timeZone)
-    {
-        ValidateIsNotNull(timeZone, "Timezone");
-        TimeZoneService.GetIanaTimeZoneId(timeZone);
-    }
-
-    private async Task ValidateImage(ImageFileResult image)
-    {
-        //Validate image title
-        if (Regex.IsMatch(
-            image.Title,
-            @"[^a-zA-Z0-9_ -]"
-        ))
-        {
-            throw new ArgumentException(
-                $"Error: {image.Title} is an invalid title.\n" +
-                "Only alphabet, numbers, underscores, hyphens and spaces are acceptable."
-            );
-        }
-
-        FileResult file = image.FileResult;
-        if (!ALLOWED_IMAGE_TYPE.Contains(file.ContentType))
-        {
-            throw new ArgumentException($"Error: {file.FileName} is invalid image type.\n" +
-                $"Only .jpg / .jpeg / .png is supported.");
-        }
-        using var stream = await file.OpenReadAsync();
-
-        long fileSizeInBytes = stream.Length;
-
-        if (fileSizeInBytes > MAX_FILE_SIZE)
-        {
-            throw new ArgumentException($"Error: {file.FileName} is over limited file size.\n" +
-                $"Maximum {(MAX_FILE_SIZE / 1024.0) / 1024.0} Mb is allowed.");
-        }
-
-    }
-}
-public class ImageFileResult
-{
-
-    public FileResult FileResult { get; set; }
-
-    public string Title { get; set; } // Changes on this from c# will not be effected to UI on live. Use INotifyPropertyChangeed is needed.
-
-    public string PathInStorage => ImageStorageService.GenerateImagePath(
-                    this.Title,
-                    this.FileResult.ContentType.Split('/')[1]
-                    );
 }
 
 public class WorkTypeDisplayConverter : IValueConverter

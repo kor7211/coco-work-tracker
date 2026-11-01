@@ -26,9 +26,9 @@ public static class TimeZoneService
         TimeZoneInfo timeZone)
     {
         DateTime localDateTime = DateTime.SpecifyKind(
-        date.Date + time,
-        DateTimeKind.Unspecified
-    );
+            date.Date + time,
+            DateTimeKind.Unspecified
+        );
 
         DateTime utcDateTime = TimeZoneInfo.ConvertTimeToUtc(
             localDateTime,
