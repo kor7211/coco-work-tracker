@@ -23,9 +23,17 @@
                     Style="{StaticResource ButtonLarge}"
                     Clicked="OnCreateClicked" />
 
-            <VerticalStackLayout x:Name="CardContainer">
-
-            </VerticalStackLayout>
+            <FlexLayout x:Name="CardContainer"
+                        Direction="Row"
+                        Wrap="Wrap"
+                        JustifyContent="Start"
+                        AlignContent="Start"
+                        AlignItems="Start" 
+                        HorizontalOptions="Center"
+                        >
+                
+            </FlexLayout>
+                        
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

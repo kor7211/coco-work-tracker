@@ -3,24 +3,34 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Recorder.Controls.RecordCard">
 
-    <Border x:Name="OutlineBorder">
+    <Border x:Name="OutlineBorder"
+            WidthRequest="500"
+            StrokeThickness="5"
+            Padding="5, 3"
+            StrokeShape="{RoundRectangle CornerRadius='5'}"
+            BackgroundColor="{StaticResource BackgroundShadeColor}">
         <VerticalStackLayout
             Padding="10, 5">
             <Label x:Name="TypeLabel"
                    Text="Type" 
-                   VerticalOptions="Center"/>
+                   Style="{StaticResource MainConetent}"
+                   HorizontalOptions="Center"/>
             <Grid ColumnDefinitions="*, auto, auto"
-                  VerticalOptions="Fill">
+                  HorizontalOptions="Fill">
                 <Label x:Name="TitleLabel"
-                       Style="{StaticResource SubHeadline}" />
+                       Style="{StaticResource Title}" />
                 <Label Text="En/Ja" 
-                       Grid.Column="1"/>
+                       Grid.Column="1"
+                       VerticalOptions="Center"/>
                 <Switch x:Name="LanguageSwitch"
                         Grid.Column="2"
-                        IsToggled="True"
+                        IsToggled="False"
+                        OffColor="{StaticResource SecondaryColor}"
+                        OnColor="{StaticResource SecondaryColor}"
                         Toggled="OnLanguageToggled" />
             </Grid>
-            <Label x:Name="CommentLabel" />
+            <Label x:Name="CommentLabel"
+                   Style="{StaticResource MainConetent}"/>
             
             <Label x:Name="DurationLabel"
                    Text="0(min)" />
@@ -42,15 +52,22 @@
                   ColumnDefinitions="auto,*, auto" >
                 <ImageButton x:Name="BackImageButton"
                              Source="arrow_back.png"
-                             Clicked="OnBackImageClicked" />
+                             Clicked="OnBackImageClicked" 
+                             VerticalOptions="Center"/>
 
                 <Image x:Name="ImageContainer"
-                       Grid.Column="1" />
+                       Grid.Column="1" 
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       MaximumHeightRequest="500"
+                       Aspect="AspectFit"
+                       />
 
                 <ImageButton x:Name="ForwardImageButton"
                              Grid.Column="2"
                              Source="arrow_forward.png"
-                             Clicked="OnForwardImageClicked" />
+                             Clicked="OnForwardImageClicked" 
+                             VerticalOptions="Center"/>
             </Grid>
                   
         </VerticalStackLayout>

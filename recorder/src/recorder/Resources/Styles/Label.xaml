@@ -8,7 +8,7 @@
         <Setter Property="FontFamily"
                 Value="NunitoSans" />
         <Setter Property="FontSize"
-                Value="Medium" />
+                Value="Default" />
     </Style>
 
     <Style TargetType="Label" x:Key="Error">
@@ -38,13 +38,22 @@
         Value="Header" />
     </Style>
 
-    <Style TargetType="Label" x:Key="SubHeadline">
+    <Style TargetType="Label" x:Key="Title">
         <Setter Property="TextColor"
         Value="{StaticResource TextHeadline}" />
         <Setter Property="FontFamily"
         Value="AntonRegular" />
         <Setter Property="FontSize"
-        Value="Subtitle" />
+        Value="Title" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="MainConetent">
+        <Setter Property="TextColor"
+        Value="{StaticResource TextHeadline}" />
+        <Setter Property="FontFamily"
+        Value="NunitoSans" />
+        <Setter Property="FontSize"
+        Value="Medium" />
     </Style>
 
 

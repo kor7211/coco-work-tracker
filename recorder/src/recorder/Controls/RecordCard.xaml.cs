@@ -30,7 +30,7 @@ public partial class RecordCard : ContentView
 
     private int DesplayedImageIndex = 0;
 
-    private bool IsLanguageEn = true;
+    private bool IsLanguageJa = false;
 
     private Brush BorderColor;
 
@@ -49,11 +49,11 @@ public partial class RecordCard : ContentView
 
 	public void UpdateCard()
 	{
-        TitleLabel.Text = IsLanguageEn ?
+        TitleLabel.Text = !IsLanguageJa ?
             TitleEn :
             TitleJa;
 
-        CommentLabel.Text = IsLanguageEn?
+        CommentLabel.Text = !IsLanguageJa?
             CommentEn:
             CommentJa;
 
@@ -85,7 +85,7 @@ public partial class RecordCard : ContentView
 
     private void OnLanguageToggled(object sender, EventArgs e)
     {
-        IsLanguageEn = LanguageSwitch.IsToggled;
+        IsLanguageJa = LanguageSwitch.IsToggled;
         UpdateCard();
     }
 
