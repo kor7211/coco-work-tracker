@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <Style x:Key="ButtonLarge" TargetType="Button">
+        <Setter Property="Padding" Value="16,10" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="FontSize" Value="Large" />
+        <Setter Property="FontFamily" Value="AntonRegular" />
+        <Setter Property="BackgroundColor" 
+                Value="{StaticResource PrimaryColor}" />
+        <Setter Property="TextColor" 
+                Value="{StaticResource TextOnPrimaryColor}" />
+        <Style.Triggers>
+            <Trigger TargetType="Button" 
+                     Property="IsEnabled" 
+                     Value="False">
+                <Setter Property="BackgroundColor" 
+                        Value="{StaticResource DisabledColor}" />
+                <Setter Property="TextColor" 
+                        Value="{StaticResource TextOnDisabledColor}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ButtonMedium" TargetType="Button">
+        <Setter Property="Padding" Value="12,8" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="FontSize" Value="Medium" />
+        <Setter Property="FontFamily" Value="AntonRegular" />
+        <Setter Property="BackgroundColor" 
+                Value="{StaticResource SecondaryColor}" />
+        <Setter Property="TextColor" 
+                Value="{StaticResource TextOnSecondaryColor}" />
+        <Style.Triggers>
+            <Trigger TargetType="Button"
+                     Property="IsEnabled" 
+                     Value="False">
+                <Setter Property="BackgroundColor" 
+                        Value="{StaticResource DisabledColor}" />
+                <Setter Property="TextColor" 
+                        Value="{StaticResource TextOnDisabledColor}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ButtonSmall" TargetType="Button">
+        <Setter Property="Padding" Value="10,8" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="FontSize" Value="Small" />
+        <Setter Property="FontFamily" Value="AntonRegular" />
+        <Setter Property="BackgroundColor" 
+                Value="{StaticResource TertiaryColor}" />
+        <Setter Property="TextColor" 
+                Value="{StaticResource TextOnTertiaryColor}" />
+        <Style.Triggers>
+            <Trigger TargetType="Button" 
+                     Property="IsEnabled" 
+                     Value="False">
+                <Setter Property="BackgroundColor" 
+                    Value="{StaticResource DisabledColor}" />
+                <Setter Property="TextColor" 
+                    Value="{StaticResource TextOnDisabledColor}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

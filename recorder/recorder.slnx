@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="recorder.csproj" />
+  <Project Path="src/recorder/recorder.csproj" />
+  <Project Path="src/recorder.Core/recorder.Core.csproj" />
+  <Project Path="tests/recorder.Tests.csproj" Id="48c89d27-6011-46a7-ae61-ee0c68c2dff0" />
 </Solution>

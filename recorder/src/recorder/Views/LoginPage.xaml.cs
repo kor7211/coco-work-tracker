@@ -1,0 +1,113 @@
+using Recorder.Core.Models;
+using Supabase;
+using Supabase.Gotrue;
+using System.ComponentModel.DataAnnotations;
+
+namespace Recorder.Views;
+
+public partial class LoginPage : ContentPage
+{
+	private AppState _appState;
+
+	private AppShell _shell;
+	public LoginPage(AppState appState, AppShell shell)
+	{
+		InitializeComponent();
+
+		_appState = appState;
+
+		_shell = shell;
+
+        _shell.IsPopEnabled = false;
+    }
+
+    protected override async void OnAppearing()
+	{
+        if (_appState.IsAuthenticated)
+        {
+            _shell.IsPopEnabled = true;
+
+            await Navigation.PopAsync(true);
+        }
+    }
+
+
+    private async void OnLoginButtonClicked(object sender, EventArgs e)
+	{
+		string email = EmailEntry.Text;
+
+		string password = PasswordEntry.Text;
+
+		//Validation
+		if (!ValidateEmail(email)) return;
+		if (!ValidatePassword(password)) return;
+
+		try
+		{
+			LoadingIndicator.IsRunning = true;
+            LoadingIndicator.IsVisible = true;
+
+            await _appState.Login(email, password);
+			
+			// if success
+
+			Supabase.Client? client = _appState.Supabase;
+			if (client == null) 
+				throw new NullReferenceException(nameof(client));
+            SupabaseService service = new SupabaseService(client);
+
+			_appState.Histories.AddRange(await service.GetHistoriesAsync());
+            _appState.WorkTypes.AddRange(await service.GetWorkTypesAsync());
+
+            _shell.IsPopEnabled = true;
+
+            await Navigation.PopAsync(true);
+
+        } catch (Exception ex) {
+			string message = "Error: Fail to login. Please try different password or retry later.\n" +
+				$"Error Detail: {ex.Message}";
+			DisplayError(message);
+		} finally
+		{
+            LoadingIndicator.IsRunning = false;
+            LoadingIndicator.IsVisible = false;
+        }
+	}
+
+	private bool ValidateEmail(string email)
+	{
+        if (String.IsNullOrWhiteSpace(email))
+        {
+            string message = "Error: Email missing.";
+            DisplayError(message);
+			return false;
+        }
+		
+		EmailAddressAttribute attribute = new EmailAddressAttribute();
+		if (!attribute.IsValid(email))
+		{
+            string message = "Error: Invalid email.";
+            DisplayError(message);
+            return false;
+        }
+
+		return true;
+    }
+
+    private bool ValidatePassword(string password)
+    {
+        if (String.IsNullOrWhiteSpace(password))
+        {
+            string message = "Error: Password missing.";
+            DisplayError(message);
+            return false;
+        }
+
+        return true;
+    }
+
+    private void DisplayError(string message)
+	{
+		ErrorMessageLabel.Text = message;
+	}
+}
