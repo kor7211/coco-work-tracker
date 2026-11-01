@@ -38,4 +38,15 @@
         Value="Header" />
     </Style>
 
+    <Style TargetType="Label" x:Key="SubHeadline">
+        <Setter Property="TextColor"
+        Value="{StaticResource TextHeadline}" />
+        <Setter Property="FontFamily"
+        Value="AntonRegular" />
+        <Setter Property="FontSize"
+        Value="Subtitle" />
+    </Style>
+
+
+
 </ResourceDictionary>

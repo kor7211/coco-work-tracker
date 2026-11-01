@@ -26,24 +26,31 @@ public partial class RecordCard : ContentView
 
     public string Timezone = "";
 
+    private bool IsLanguageEn = true;
+
+    private Brush BorderColor;
+
 	// Image
 
-	public RecordCard(History history)
+	public RecordCard(History history, Brush? borderColor = null)
 	{
 		InitializeComponent();
 
 		History = history;
+
+        
+        BorderColor = borderColor?? Brush.Default;
 	}
 
 	public void UpdateCard()
 	{
-        TitleEnLabel.Text = TitleEn;
+        TitleLabel.Text = IsLanguageEn ?
+            TitleEn :
+            TitleJa;
 
-        TitleJaLabel.Text = TitleJa;
-
-        CommentEnLabel.Text = CommentEn;
-
-        CommentJaLabel.Text = CommentJa;
+        CommentLabel.Text = IsLanguageEn?
+            CommentEn:
+            CommentJa;
 
         TypeLabel.Text = Type;
 
@@ -56,5 +63,13 @@ public partial class RecordCard : ContentView
         UploadedLabel.Text = Uploaded.ToString("g");
 
         TimezoneLabel.Text = Timezone;
+
+        OutlineBorder.Stroke = BorderColor;
 	}
+
+    private void OnLanguageToggled(object sender, EventArgs e)
+    {
+        IsLanguageEn = LanguageSwitch.IsToggled;
+        UpdateCard();
+    }
 }

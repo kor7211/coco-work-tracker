@@ -38,7 +38,8 @@ public partial class ListRecordPage : ContentPage
     {
         if (CardContainer == null) return;
         CardContainer.Children.Clear();
-        foreach (History history in _appState.Histories)
+
+        foreach (History history in _appState.Histories.OrderByDescending(x => x.Started))
         {
             RecordCard card = new RecordCard(history)
             {
@@ -62,6 +63,8 @@ public partial class ListRecordPage : ContentPage
     private async void OnCreateClicked(object? sender, EventArgs e)
     {
         await Navigation.PushAsync(new CreateRecordPage(_appState, _shell));
+
+        UpdateRecords();
     }
 
 

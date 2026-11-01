@@ -3,35 +3,56 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Recorder.Controls.RecordCard">
 
-    <VerticalStackLayout>
-        <Label x:Name="TitleEnLabel"
-               Text="English Title" />
-        <Label x:Name="TitleJaLabel"
-               Text="English Title" />
-        
-        <Label x:Name="CommentEnLabel"
-               Text="English Comment" />
-        <Label x:Name="CommentJaLabel"
-               Text="English Comment" />
+    <Border x:Name="OutlineBorder">
+        <VerticalStackLayout
+            Padding="10, 5">
+            <Label x:Name="TypeLabel"
+                   Text="Type" 
+                   VerticalOptions="Center"/>
+            <Grid ColumnDefinitions="*, auto, auto"
+                  VerticalOptions="Fill">
+                <Label x:Name="TitleLabel"
+                       Style="{StaticResource SubHeadline}" />
+                <Label Text="En/Ja" 
+                       Grid.Column="1"/>
+                <Switch x:Name="LanguageSwitch"
+                        Grid.Column="2"
+                        IsToggled="True"
+                        Toggled="OnLanguageToggled" />
+            </Grid>
+            <Label x:Name="CommentLabel" />
+            
+            <Label x:Name="DurationLabel"
+                   Text="0(min)" />
 
-        <Label x:Name="TypeLabel"
-               Text="Type" />
+            <Label x:Name="BreakLabel"
+                   Text="0(min)" />
 
-        <Label x:Name="DurationLabel"
-               Text="0(min)" />
+            <Label x:Name="StartedLabel"
+                   Text="01/01/2000" />
 
-        <Label x:Name="BreakLabel"
-               Text="0(min)" />
+            <Label x:Name="UploadedLabel"
+                   Text="01/01/2000" />
 
-        <Label x:Name="StartedLabel"
-               Text="01/01/2000" />
+            <Label x:Name="TimezoneLabel"
+                   Text="Japan/Tokyo" />
 
-        <Label x:Name="UploadedLabel"
-               Text="01/01/2000" />
+            <Grid x:Name="ImageGrid"
+                  IsVisible="Hidden"
+                  ColumnDefinitions="auto,*, auto" >
+                <ImageButton x:Name="BackImageButton"
+                             Source="arrow_back.png"
+                             Clicked="OnBackImageClicked" />
 
-        <Label x:Name="TimezoneLabel"
-               Text="Japan/Tokyo" />
+                <Image x:Name="ImageContainer"
+                       Grid.Column="1" />
 
-        <!--images can be displayed here-->
-    </VerticalStackLayout>
+                <ImageButton x:Name="ForwardImageButton"
+                             Grid.Column="2"
+                             Source="arrow_forward.png"
+                             Clicked="OnForwardImageClicked" />
+            </Grid>
+                  
+        </VerticalStackLayout>
+    </Border>
 </ContentView>
