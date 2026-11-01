@@ -10,7 +10,9 @@ public partial class ListRecordPage : ContentPage
 
     private readonly AppShell _shell;
 
-    private readonly SupabaseService Service;
+    private readonly SupabaseService _service;
+
+    private readonly ImageStorageService _storageService;
 
 	public ListRecordPage(AppState appState, AppShell shell)
 	{
@@ -20,14 +22,16 @@ public partial class ListRecordPage : ContentPage
 
         _shell = shell;
 
-        Service = new SupabaseService(_appState.Supabase);
+        _service = new SupabaseService(_appState.Supabase);
+
+        _storageService = new ImageStorageService(_appState.Supabase);
 
         UpdateRecords();
 	}
 
     private async Task GetLatestRecordsAsync()
     {
-        List<History> response = await Service.GetHistoriesAsync();
+        List<History> response = await _service.GetHistoriesAsync();
 
         _appState.Histories.Clear();
 
@@ -53,6 +57,9 @@ public partial class ListRecordPage : ContentPage
                 Started = history.Started,
                 Uploaded = history.Uploaded,
                 Timezone = history.Timezone,
+                ImageUrlCollection = [.. history.ImagePaths.Select(
+                    x => _storageService.GetImageUrl(x.Path)
+                    )]
             };
             card.UpdateCard();
 

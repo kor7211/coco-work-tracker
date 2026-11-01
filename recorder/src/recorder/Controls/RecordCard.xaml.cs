@@ -26,6 +26,10 @@ public partial class RecordCard : ContentView
 
     public string Timezone = "";
 
+    public string[]? ImageUrlCollection = null;
+
+    private int DesplayedImageIndex = 0;
+
     private bool IsLanguageEn = true;
 
     private Brush BorderColor;
@@ -39,7 +43,8 @@ public partial class RecordCard : ContentView
 		History = history;
 
         
-        BorderColor = borderColor?? Brush.Default;
+        BorderColor = borderColor?? 
+            (SolidColorBrush)Application.Current.Resources["PrimaryBrush"];
 	}
 
 	public void UpdateCard()
@@ -65,11 +70,48 @@ public partial class RecordCard : ContentView
         TimezoneLabel.Text = Timezone;
 
         OutlineBorder.Stroke = BorderColor;
+
+        if (ImageUrlCollection != null &&
+            ImageUrlCollection.Any())
+        {
+            ImageGrid.IsVisible = true;
+
+            ImageContainer.Source = new Uri(ImageUrlCollection[DesplayedImageIndex]);
+        } else
+        {
+            ImageGrid.IsVisible = false;
+        }
 	}
 
     private void OnLanguageToggled(object sender, EventArgs e)
     {
         IsLanguageEn = LanguageSwitch.IsToggled;
+        UpdateCard();
+    }
+
+    private void OnBackImageClicked(object sender, EventArgs e)
+    {
+        if (ImageUrlCollection == null) return;
+
+        DesplayedImageIndex = -1;
+        if (DesplayedImageIndex < 0)
+        {
+            DesplayedImageIndex = ImageUrlCollection.Count() - 1;
+        }
+
+        UpdateCard();
+    }
+
+    private void OnForwardImageClicked(object sender, EventArgs e)
+    {
+        if (ImageUrlCollection == null) return;
+
+        DesplayedImageIndex++;
+        if (DesplayedImageIndex >  ImageUrlCollection.Count() -1)
+        {
+            DesplayedImageIndex = 0;
+        }
+
         UpdateCard();
     }
 }

@@ -86,12 +86,29 @@ namespace Recorder.Core.Models
             return response;
         }
 
+        /// <summary>
+        /// Delete Image in Supabase Sutorage by path.
+        /// </summary>
+        /// <param name="path">Path in Storage</param>
+        /// <returns>Task</returns>
         public async Task DeleteImageAsync(
             string path)
         {
             var response = await _supabase.Storage
                 .From("history-images")
                 .Remove(path);
+        }
+
+        /// <summary>
+        /// Return url of image from path in supabase storage.
+        /// </summary>
+        /// <param name="path">Path in Storage</param>
+        /// <returns>url</returns>
+        public string GetImageUrl(string path)
+        {
+            return _supabase.Storage
+                .From("history-images")
+                .GetPublicUrl(path);
         }
     }
 }
