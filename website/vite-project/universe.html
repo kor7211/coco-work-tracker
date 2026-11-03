@@ -4,18 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Coco-K">
-    <title data-i18n="title.home"></title>
+    <title data-i18n="title.universe"></title>
 
-    <link rel="stylesheet" href="./assets/css/reset.css">
-    <link rel="stylesheet" href="./assets/css/variables.css">
-    <link rel="stylesheet" href="./assets/css/base.css">
 </head>
 
 <body>
     <div class="wrapper hidden"></div>
     <header>
         <section class="logo-container">
-            <image src="./assets/images/logo64.jpg" alt="Logo"></image>
+            <image src="./logo64.jpg" alt="Logo"></image>
             <h1 data-i18n="site.name"></h1>
         </section>
         <div class="language-selector">
@@ -35,8 +32,8 @@
     </header>
     <nav>
         <ul>
-            <li><a href="#" data-i18n="page.home"></a></li>
-            <li><a href="./universe/index.html" data-i18n="page.universe"></a></li>
+            <li><a href="./index.html" data-i18n="page.home"></a></li>
+            <li><a href="#" data-i18n="page.universe"></a></li>
         </ul>
     </nav>
     <main>
@@ -45,18 +42,24 @@
     </main>
     <footer>
         <section class="logo-container">
-            <image src="./assets/images/logo64.jpg" alt="Logo"></image>
+            <image src="./logo64.jpg" alt="Logo"></image>
             <h1 data-i18n="site.name"></h1>
         </section>
         <p data-i18n="copyright"></p>
         <ul>
-            <li><a href="#" data-i18n="page.home"></a></li>
-            <li><a href="./universe/index.html" data-i18n="page.universe"></a></li>
+            <li><a href="./index.html" data-i18n="page.home"></a></li>
+            <li><a href="#" data-i18n="page.universe"></a></li>
         </ul>
     </footer>
+    <template id="history-template">
+        <div>
+            <section>
+                <h1 class="title"></h1>
+                <p class="comment"></p>
+            </section>
+        </div>
+    </template>
 
-    <script type="module" src="./assets/js/language_setter.js"></script>
-    <script type="module" src="./assets/js/language_selector_controller.js"></script>
+    <script type="module" src="./src/scripts/pages/universe.ts"></script>
 </body>
-
 </html>

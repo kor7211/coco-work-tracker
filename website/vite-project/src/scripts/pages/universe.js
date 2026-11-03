@@ -1,3 +1,5 @@
+// Main script for universe page
+
 import { getHistories } from "./api_history.js";
 import { getCurrentLangage } from "./language_setter.js";
 

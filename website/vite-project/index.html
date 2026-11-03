@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="author" content="Coco-K">
+  <title data-i18n="title.home"></title>
+
+</head>
+<body>
+  <div class="wrapper hidden"></div>
+  <header>
+    <section class="logo-container">
+      <image src="./logo64.jpg" alt="Logo"></image>
+      <h1 data-i18n="site.name"></h1>
+    </section>
+    <div class="language-selector">
+      <button class="language-button" type="button">
+        Lang
+        <span>⌄</span>
+      </button>
+
+      <div class="language-options">
+        <button type="button" data-lang="en">en</button>
+        <button type="button" data-lang="ja">jp</button>
+      </div>
+    </div>
+    <button class="navigation-button hamburger" type="button">
+      <span></span>
+    </button>
+  </header>
+  <nav>
+    <ul>
+      <li><a href="#" data-i18n="page.home"></a></li>
+      <li><a href="./universe.html" data-i18n="page.universe"></a></li>
+    </ul>
+  </nav>
+  <main>
+    <div id="history-container"></div>
+    <div id="scroll-trigger"></div>
+  </main>
+  <footer>
+    <section class="logo-container">
+      <image src="./logo64.jpg" alt="Logo"></image>
+      <h1 data-i18n="site.name"></h1>
+    </section>
+    <p data-i18n="copyright"></p>
+    <ul>
+      <li><a href="#" data-i18n="page.home"></a></li>
+      <li><a href="./universe.html" data-i18n="page.universe"></a></li>
+    </ul>
+  </footer>
+
+  <script type="module" src="./src/scripts/pages/home.ts"></script>
+</body>
+</html>

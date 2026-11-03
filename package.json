@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@types/node": "^26.6.6",
     "supabase": "^2.120.0"
   }
 }

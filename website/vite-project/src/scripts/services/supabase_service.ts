@@ -1,8 +1,4 @@
-/**
- * This module allows to fetch data from supabase.
- */
-
-import { supabase } from "./supabase_client.js";
+import client from "./supabase_client.ts";
 
 /**
  * Get histories from supabase.
@@ -11,32 +7,30 @@ import { supabase } from "./supabase_client.js";
  * @param {int} before_id  Default null. When 'before' is not null, this must be also not null. When there are more than one records whose 'started' are same, less than this id will be returned.
  * @returns 
  */
-export async function getHistories(
-    limit = 10, 
-    before = null, 
-    before_id = null) {
+export async function getHistories (
+    limit: number = 10, 
+    before: string | null = null, 
+    before_id: number | null = null) : Promise<any> {
     // Valification
     // limit
-    if (!Number.isInteger(limit)) {
-        throw new Error("limit must be integer");
-    }
     if (limit < 1 || limit > 100) {
         throw new Error("limit must be in range of 1 to 100");
     }
     // before
-    if (!isTimestamp(before) && before != null) {
-        throw new Error("before must be timestamptz format");
-    }
-    // before_id
-    if (!Number.isInteger(before_id) && before_id != null) {
-        throw new Error("limit must be integer");
+    if (before != null) {
+        if (!isTimestamp(before)) {
+            throw new Error("before must be timestamptz format");
+        }
+        if (before_id == null) {
+            throw new Error("before_id must be specified when before is specified");
+        }
     }
 
     let histories = null;
     //API connect
-    if (before == null || before_id == null) {
+    if (before == null) {
         //Get latest data.
-        const { data, error } = await supabase
+        const { data, error } = await client
             .from('histories')
             .select(`
                 *,
@@ -54,7 +48,7 @@ export async function getHistories(
 
         histories = data;
     } else {
-        const { data, error } = await supabase
+        const { data, error } = await client
             .from('histories')
             .select(`
                 *,
@@ -79,7 +73,7 @@ export async function getHistories(
     // Translate path to url
     for (const history of histories) {
         history.images = await Promise.all(
-            history.images.map(image => getImageUrl(image.path))
+            history.images.map((image: { path: string }) => getImageUrl(image.path))
         );
     }
 
@@ -91,7 +85,7 @@ export async function getHistories(
  * @param {string} str Target string.
  * @returns {boolean}
  */
-function isTimestamp(str) {
+function isTimestamp(str: string): boolean {
     const regex =
         /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
 
@@ -112,8 +106,8 @@ function isTimestamp(str) {
  * @param {str} path Path for supabase storage
  * @returns {str} Url for image.
  */
-async function getImageUrl(path) {
-    const { data, error } = supabase
+async function getImageUrl(path: string): Promise<string> {
+    const { data, error } = client
         .storage
         .from('history-images')
         .getPublicUrl(path);
@@ -127,26 +121,17 @@ async function getImageUrl(path) {
 
 /**
  * Return list of work types.
- * @param {int} limit 
  * @returns
  */
-export async function getTypes(limit = 10) {
-    if (!Number.isInteger(limit)) {
-        throw new Error("Limit need to be integer");
-    }
-    if (limit < 1 && limit > 100) {
-        throw new Error("Limit need to be in range of 1 to 100");
-    }
-
-    const { data, error } = supabase
+export async function getTypes(): Promise<any> {
+    const { data, error } = client
         .from('work-types')
         .select(`
             *,
             work-type-names(en, ja),
             work-type-descriptions(en, ja)
         `)
-        .order('id', { ascending: false })
-        .limit(limit);
+        .order('id', { ascending: false });
 
     if (error) {
         throw error;
