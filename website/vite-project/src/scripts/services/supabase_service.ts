@@ -110,12 +110,12 @@ async function getImageUrl(path: string): Promise<string> {
  * @returns
  */
 export async function getTypes(): Promise<any> {
-    const { data, error } = client
-        .from('work-types')
+    const { data, error } = await client
+        .from('work_types')
         .select(`
             *,
-            work-type-names(en, ja),
-            work-type-descriptions(en, ja)
+            work_type_names(en, ja),
+            work_type_descriptions(en, ja)
         `)
         .order('id', { ascending: false });
 
@@ -123,5 +123,5 @@ export async function getTypes(): Promise<any> {
         throw error;
     }
 
-    return data
+    return data;
 }

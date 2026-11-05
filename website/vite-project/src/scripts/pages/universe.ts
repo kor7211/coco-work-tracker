@@ -127,7 +127,7 @@ function addNewRow(): void {
     }
 
     oldestRow = row;
-    tbody.appendChild(row);
+    tbody?.appendChild(row);
 }
 
 function formatDateKey(date: Date): string {

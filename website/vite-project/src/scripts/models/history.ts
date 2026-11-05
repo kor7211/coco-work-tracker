@@ -2,11 +2,11 @@ export class History {
     private static _histories: History[] = [];
 
     public id: bigint;
-    public title: {
+    public titles: {
         en: string;
         ja: string;
     };
-    public comment: {
+    public comments: {
         en: string;
         ja: string;
     }
@@ -31,11 +31,11 @@ export class History {
         timezone: string
     ) {
         this.id = id;
-        this.title = {
+        this.titles = {
             en: titleEn,
             ja: titleJa
         };
-        this.comment = {
+        this.comments = {
             en: commentEn,
             ja: commentJa
         };
@@ -50,12 +50,13 @@ export class History {
     };
 
     public static fromJson(json: any): History {
+
         return new History(
             BigInt(json.id),
-            json.title.en,
-            json.title.ja,
-            json.comment.en,
-            json.comment.ja,
+            json.titles.en,
+            json.titles.ja,
+            json.comments.en,
+            json.comments.ja,
             BigInt(json.type_id),
             json.duration_minutes,
             json.break_minutes,

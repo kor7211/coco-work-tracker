@@ -2,11 +2,11 @@ export class WorkType {
     private static _workTypes: WorkType[] = [];
     
     public id: bigint;
-    public name: {
+    public names: {
         en: string;
         jn: string;
     }
-    public description: {
+    public descriptions: {
         en: string;
         jn: string;
     }
@@ -19,11 +19,11 @@ export class WorkType {
         descriptionJn: string,
     ) {
         this.id = id;
-        this.name = {
+        this.names = {
             en: nameEn,
             jn: nameJn
         };
-        this.description = {
+        this.descriptions = {
             en: descriptionEn,
             jn: descriptionJn
         };
@@ -34,10 +34,10 @@ export class WorkType {
     public static fromJson(json: any): WorkType {
         return new WorkType(
             BigInt(json.id),
-            json.name.en,
-            json.name.jn,
-            json.description.en,
-            json.description.jn
+            json.work_type_names.en,
+            json.work_type_names.jn,
+            json.work_type_descriptions.en,
+            json.work_type_descriptions.jn
         );
     }
 
