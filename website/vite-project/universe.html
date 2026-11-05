@@ -5,11 +5,9 @@
     <meta charset="UTF-8">
     <meta name="author" content="Coco-K">
     <title data-i18n="title.universe"></title>
-
 </head>
 
 <body>
-    <div class="wrapper hidden"></div>
     <header>
         <section class="logo-container">
             <image src="./logo64.jpg" alt="Logo"></image>
@@ -37,8 +35,23 @@
         </ul>
     </nav>
     <main>
-        <div id="history-container"></div>
-        <div id="scroll-trigger"></div>
+        <div id="history-table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th data-i18n="weekday.sunday"></th>
+                        <th data-i18n="weekday.monday"></th>
+                        <th data-i18n="weekday.tuesday"></th>
+                        <th data-i18n="weekday.wednesday"></th>
+                        <th data-i18n="weekday.thursday"></th>
+                        <th data-i18n="weekday.friday"></th>
+                        <th data-i18n="weekday.saturday"></th>
+                    </tr>
+                </thead>
+                <tbody id="history-table-body">
+                </tbody>
+            </table>
+        </div>
     </main>
     <footer>
         <section class="logo-container">
@@ -51,14 +64,6 @@
             <li><a href="#" data-i18n="page.universe"></a></li>
         </ul>
     </footer>
-    <template id="history-template">
-        <div>
-            <section>
-                <h1 class="title"></h1>
-                <p class="comment"></p>
-            </section>
-        </div>
-    </template>
 
     <script type="module" src="./src/scripts/pages/universe.ts"></script>
 </body>

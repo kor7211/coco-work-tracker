@@ -20,21 +20,14 @@
         "universe": "Explore Universe",
         "recorder": "Make a Record"
     },
-    "recorder": {
-        "record": "Create Work Record",
-        "title": "Title",
-        "comment": "Comment or Description",
-        "started": "When you started",
-        "durationMinutes": "How many minutes you did",
-        "breakMinutes": "How many minutes break was",
-        "timezone": "Which timezone you in",
-        "type": "What type this work is",
-        "image": "Related images"
-    },
-    "workTypeCreater": {
-        "workType": "Create Type",
-        "name": "Name",
-        "description": "Description"
+    "weekday": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
     },
     "copyright": "© 2026 Coco-K"
 }

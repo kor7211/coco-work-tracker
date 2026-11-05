@@ -9,8 +9,8 @@ import client from "./supabase_client.ts";
  */
 export async function getHistories (
     limit: number = 10, 
-    before: string | null = null, 
-    before_id: number | null = null) : Promise<any> {
+    before: Date | null = null, 
+    before_id: bigint | null = null) : Promise<any> {
     // Valification
     // limit
     if (limit < 1 || limit > 100) {
@@ -18,7 +18,7 @@ export async function getHistories (
     }
     // before
     if (before != null) {
-        if (!isTimestamp(before)) {
+        if (!validateDateFormat(before)) {
             throw new Error("before must be timestamptz format");
         }
         if (before_id == null) {
@@ -57,7 +57,7 @@ export async function getHistories (
                 images(path)
             `)
             .or(
-                `started.lt.${before},and(started.eq.${before},id.lt.${before_id})`
+                `started.lt.${before.toISOString()},and(started.eq.${before.toISOString()},id.lt.${before_id})`
             )
             .order('started', { ascending: false })
             .order('id', { ascending: false })
@@ -80,25 +80,11 @@ export async function getHistories (
     return histories;
 }
 
-/**
- * Return result of testing if string is timestamptz format.
- * @param {string} str Target string.
- * @returns {boolean}
- */
-function isTimestamp(str: string): boolean {
+function validateDateFormat(date: Date): boolean {
     const regex =
         /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
 
-    if (!regex.test(str)) {
-        return false;
-    }
-
-    const date = new Date(str);
-
-    return (
-        !Number.isNaN(date.getTime()) &&
-        date.toISOString() === str
-    );
+    return regex.test(date.toISOString());
 }
 
 /**
