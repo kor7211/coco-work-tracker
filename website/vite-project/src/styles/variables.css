@@ -20,5 +20,15 @@
     --main-color-accent-shade: hsl(355, 59%, 28%);
     --main-color-accent-text: var(--white);
 
-    --hover-transition: 0.5s;
+    --background: hsl(218, 92%, 15%);
+    --background-shade: hsl(211, 100%, 6%);
+    --title-on-background: var(--white);
+    --main-text-on-background: hsl(180, 62%, 90%);
+    --sub-text-on-background: hsl(190, 25%, 66%);
+
+    --primary-color: hsl(228, 74%, 53%);
+    
+    --secondary-color: hsl(190, 95%, 45%);
+
+    --accent-color: hsl(354, 100%, 50%);
 }

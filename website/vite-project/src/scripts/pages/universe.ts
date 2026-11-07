@@ -1,13 +1,12 @@
 // Import styles
-import "../../styles/reset.css";
-import "../../styles/variables.css";
-import "../../styles/base.css";
+import "../../styles/universe.css";
 
 // Import scripts
 import "../components/i18n_setter.ts";
+import "../components/i18n_button.ts";
 import { History } from "../models/history.ts";
 import { WorkType } from  "../models/work_type.ts";
-import { generatePlanet } from "../components/planet.ts";
+import { Planet } from "../components/planet.ts";
 import { getHistories, getTypes } from "../services/supabase_service.ts";
 
 // Global Variables
@@ -60,7 +59,7 @@ async function loadMore() : Promise<void> {
  * @returns 
  */
 function addPlanet(history: History): void {
-    const planet = generatePlanet(history);
+    const planet = Planet.generatePlanetFromHistory(history);
 
     let counter = 100;
 
