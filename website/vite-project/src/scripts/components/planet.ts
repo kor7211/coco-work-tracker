@@ -37,9 +37,9 @@ export class Planet {
                 color: "hsl(0, 0%, 84%)", // Color in hsl
             },
             light: { // Planetary light settings
-                amount: 5, // Amount of light needles
+                amount: 4, // Amount of light needles
                 minRadius: 15, // Minimum height of light radius. 0 to 50. Higher than core radius. 
-                maxRadius: 40, // Minimum height of light radius. 0 to 50. Higher than core radius. Heigher than min radius.
+                maxRadius: 16, // Minimum height of light radius. 0 to 50. Higher than core radius. Heigher than min radius.
                 color: "hsl(0, 0%, 96%)", // Color in hsl
             }
         };
@@ -92,6 +92,7 @@ export class Planet {
         // Instantiate Planet
         new Planet(
             validatedOption.seed,
+            validatedOption.core.radius,
             validatedOption.light.amount,
             validatedOption.light.minRadius,
             validatedOption.light.maxRadius,
@@ -133,16 +134,19 @@ export class Planet {
     private lastUpdate: number | null = null;
     private totalTime:number =0;
     private masterSeed: number;
+    private coreRudius: number;
     private lightMinRadius: number;
     private lightMaxRadius: number;
     private constructor(
         seed: number,
+        coreRadius: number,
         sectionAmount: number,
         lightMinRadius: number,
         lightMaxRadius: number,
         pathElement: SVGPathElement,
     ) {
         this.masterSeed = seed;
+        this.coreRudius = coreRadius;
         this.sectionAmount = sectionAmount;
         this.lightMinRadius = lightMinRadius;
         this.lightMaxRadius = lightMaxRadius;
@@ -172,6 +176,15 @@ export class Planet {
     }
 
     private drow() {
+        // Rotation
+        this.path.setAttribute("transform", 
+            `rotate(${calcurateRotation(
+                this.totalTime,
+                this.masterSeed * 0.01,
+                this.masterSeed
+        )})`
+        );
+
         // Generate path attribute
         const command: string = this.createPathCommand();
 
@@ -181,28 +194,44 @@ export class Planet {
 
     private createPathCommand(): string {
         const points: [number, number][] = []; // top of light needle
-        const controls: [number, number][] = []; // positions represent control point to drow curve
+        const controls: [number, number][] = []; // positions represent control point to draw curve
+        const targets: [number, number][] =[] // target positions draw curve from point
+
         const anglePerSection = 360 / this.sectionAmount;
+        const controlLength = this.coreRudius * Math.cos(radian(anglePerSection / 2));
+
+        const length = calcurateRadius(
+            this.totalTime,
+            this.masterSeed,
+            this.lightMinRadius,
+            this.lightMaxRadius,
+        ); // Height of point from core
+        
 
         for (let i = 0; i < this.sectionAmount; i++) {
-            const length = calcurateRadius(
-                this.totalTime,
-                hashNumbers(this.masterSeed, 0),
-                this.lightMinRadius,
-                this.lightMaxRadius,
-            ); // Height of point from core
-            const angle = radian(anglePerSection * i);
+            const angle = radian(anglePerSection * i);    
             points.push(getPosFromVector(angle, length));
 
-            const controlAngle = radian(anglePerSection * (i + 0.5));
-            controls.push(getPosFromVector(controlAngle, this.lightMinRadius));
+            controls.push(getPosFromVector(angle ,controlLength));
+
+            const targetAngle = radian(anglePerSection * (i + 0.5));
+            targets.push(getPosFromVector(targetAngle, this.coreRudius));
         }
 
-        let command: string = move(points[points.length - 1]); // Move to last point
+        let command: string = "";
+        command += move(points[0]);
         for (let i = 0; i < points.length; i++) {
+            const next:number = i + 1< points.length?
+                i + 1:
+                0;
+            
             command += curve(
                 controls[i],
-                points[i]
+                targets[i]
+            );
+            command += curve(
+                controls[next],
+                points[next]
             );
         } // Drow curves
 
@@ -248,7 +277,7 @@ function curve(control: [number, number], target: [number, number]): string {
 }
 
 /**
- * 
+ * Blink sometimes
  * @param time Current total time
  * @param speed Speed of iteration 0 - 1
  * @param min Minimum height from core
@@ -256,7 +285,19 @@ function curve(control: [number, number], target: [number, number]): string {
  * @returns 
  */
 function calcurateRadius(time:number, speed: number, min: number, max: number): number {
-    return Math.abs(((max - min) * Math.sin(time * speed))) + min;
+    //return Math.abs(((max - min) * Math.sin(time * speed))) + min;
+    const rotationSpeed: number = 0.05;
+    return Math.max(Math.abs(Math.sin(time * speed * rotationSpeed)) * max, min); 
+}
+
+function calcurateRotation(time:number, speed: number, seed: number): number {
+    const x = (time + hashNumbers(seed, 0)) * speed;
+    const rotation = (
+        Math.cos(x) > 0
+        ?Math.sin(x) + 1
+        :Math.sin(x + Math.PI) + 1
+    ) * 360;
+    return rotation;
 }
 
 /**
