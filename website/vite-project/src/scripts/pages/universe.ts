@@ -2,6 +2,7 @@
 import "../../styles/universe.css";
 
 // Import scripts
+import "../components/font-setter.ts";
 import "../components/i18n_setter.ts";
 import "../components/i18n_button.ts";
 import { History } from "../models/history.ts";

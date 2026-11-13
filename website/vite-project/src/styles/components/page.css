@@ -1,0 +1,23 @@
+body {
+    background-color: var(--background);
+}
+
+body>header {
+
+    /* Contents */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+body>header>button.i18n-button {
+    /* Visual */
+    background-color: transparent;
+    color: var(--main-text-on-background);
+    border: none;
+    border-bottom: 3px solid var(--primary-color);
+    font-family: var(--ui-font);
+    
+    /* Position */
+    margin-left: auto;
+}

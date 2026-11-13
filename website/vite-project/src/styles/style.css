@@ -1,6 +1,4 @@
 @import "./reset.css";
 @import "./variables.css";
-
-body {
-    background-color: var(--background);
-}
+@import "./components/button.css";
+@import "./components/page.css";
