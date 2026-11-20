@@ -1,0 +1,12 @@
+@import "./style.css";
+
+#character-window {
+    height: 300px;
+    width: 200px;
+
+    border: 3px dotted white;
+    background-color: rgb(164, 164, 164);
+
+    align-self: center;
+    justify-self: center;
+}
