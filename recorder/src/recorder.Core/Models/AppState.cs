@@ -34,6 +34,15 @@ namespace Recorder.Core.Models
             await Supabase.Auth.SignIn(email, passward);
         }
 
+        public bool IsLoggedIn
+        {
+            get {
+                if (this.Session is null) return false;
+
+                return !string.IsNullOrEmpty(this.Session.AccessToken);
+            }
+        }
+
         public Supabase.Gotrue.Session? Session => Supabase?.Auth.CurrentSession;
 
         public bool IsAuthenticated => Session is not null;

@@ -27,8 +27,10 @@ namespace Recorder.Views
 
             _hasCheckedAuthentication = true;
 
-            await Navigation.PushAsync(
+            if (!_appState.IsLoggedIn) {
+                await Navigation.PushAsync(
                 new LoginPage(_appState, _shell));
+            }
         }
 
         private async void OnListRecordsClicked(object? sender, EventArgs e)

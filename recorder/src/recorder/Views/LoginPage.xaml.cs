@@ -21,16 +21,6 @@ public partial class LoginPage : ContentPage
         _shell.IsPopEnabled = false;
     }
 
-    protected override async void OnAppearing()
-	{
-        if (_appState.IsAuthenticated)
-        {
-            _shell.IsPopEnabled = true;
-
-            await Navigation.PopAsync(true);
-        }
-    }
-
 
     private async void OnLoginButtonClicked(object sender, EventArgs e)
 	{
