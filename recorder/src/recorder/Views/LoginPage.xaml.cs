@@ -41,14 +41,6 @@ public partial class LoginPage : ContentPage
 			
 			// if success
 
-			Supabase.Client? client = _appState.Supabase;
-			if (client == null) 
-				throw new NullReferenceException(nameof(client));
-            SupabaseService service = new SupabaseService(client);
-
-			_appState.Histories.AddRange(await service.GetHistoriesAsync());
-            _appState.WorkTypes.AddRange(await service.GetWorkTypesAsync());
-
             _shell.IsPopEnabled = true;
 
             await Navigation.PopAsync(true);

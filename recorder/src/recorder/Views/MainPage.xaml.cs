@@ -31,6 +31,20 @@ namespace Recorder.Views
                 await Navigation.PushAsync(
                 new LoginPage(_appState, _shell));
             }
+
+            try
+            {
+                Supabase.Client? client = _appState.Supabase;
+                if (client == null)
+                    throw new NullReferenceException(nameof(client));
+                SupabaseService service = new SupabaseService(client);
+
+                _appState.Histories.AddRange(await service.GetHistoriesAsync());
+                _appState.WorkTypes.AddRange(await service.GetWorkTypesAsync());
+            } finally
+            {
+
+            }
         }
 
         private async void OnListRecordsClicked(object? sender, EventArgs e)
