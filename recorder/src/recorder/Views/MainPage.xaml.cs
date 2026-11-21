@@ -6,7 +6,6 @@ namespace Recorder.Views
 {
     public partial class MainPage : ContentPage
     {
-        private bool _hasCheckedAuthentication = false;
         private AppState _appState;
         private AppShell _shell;
         public MainPage(AppState appState, AppShell shell)
@@ -22,28 +21,9 @@ namespace Recorder.Views
         {
             base.OnAppearing();
 
-            if (_hasCheckedAuthentication)
-                return;
-
-            _hasCheckedAuthentication = true;
-
             if (!_appState.IsLoggedIn) {
                 await Navigation.PushAsync(
                 new LoginPage(_appState, _shell));
-            }
-
-            try
-            {
-                Supabase.Client? client = _appState.Supabase;
-                if (client == null)
-                    throw new NullReferenceException(nameof(client));
-                SupabaseService service = new SupabaseService(client);
-
-                _appState.Histories.AddRange(await service.GetHistoriesAsync());
-                _appState.WorkTypes.AddRange(await service.GetWorkTypesAsync());
-            } finally
-            {
-
             }
         }
 

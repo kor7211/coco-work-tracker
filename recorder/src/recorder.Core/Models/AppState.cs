@@ -45,10 +45,6 @@ namespace Recorder.Core.Models
 
         public Supabase.Gotrue.Session? Session => Supabase?.Auth.CurrentSession;
 
-        public bool IsAuthenticated => Session is not null;
-
-        public string? UserId => Session?.User?.Id;
-
         public readonly List<History> Histories = new List<History>();
 
         public readonly List<WorkType> WorkTypes = new List<WorkType>();

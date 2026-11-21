@@ -13,6 +13,8 @@ public partial class CreateRecordPage : ContentPage
 
     private readonly AppShell _shell;
 
+    private readonly SupabaseService _service;
+
     private readonly HistoryManager _historyManager;
 
     private bool IsLoading = false;
@@ -26,15 +28,37 @@ public partial class CreateRecordPage : ContentPage
 
 		_appState = appState;
 
+        _service = new SupabaseService(_appState.Supabase);
+
         _shell = shell;
 
         _historyManager = new HistoryManager(_appState);
 
-        UpdateTypePicker();
+        _shell.IsPopEnabled = true;
+
         SetDatetimeNow();
         UpdateTimezonePicker();
         ImageContainer.ItemsSource = SelectedImageCollection;
 	}
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        List<History> response = await _service.GetHistoriesAsync();
+
+        _appState.Histories.Clear();
+
+        _appState.Histories.AddRange(response);
+
+        List<WorkType> types = await _service.GetWorkTypesAsync();
+
+        _appState.WorkTypes.Clear();
+        
+        _appState.WorkTypes.AddRange(types);
+
+        UpdateTypePicker();
+    }
 
     private void UpdateTimezonePicker()
     {
