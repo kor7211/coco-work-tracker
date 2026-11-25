@@ -3,6 +3,46 @@ export interface Animation {
     update(elapsed:number, totalTime: number): void;
 }
 
+/**
+ * Load svg file xml as html elements.
+ * @param path 
+ * @returns 
+ */
+export async function loadSVG(path: string): Promise<SVGSVGElement> {
+    const response = await fetch(path);
+
+    if (!response.ok) {
+        throw new Error(`Failed to load SVG: ${path}`);
+    }
+
+    const svgText = await response.text();
+
+    const parser = new DOMParser();
+    const svgDocument = parser.parseFromString(
+        svgText,
+        "image/svg+xml"
+    );
+
+    const parserError = svgDocument.querySelector("parsererror");
+
+    if (parserError) {
+        console.error("SVG Parser Error:", parserError.textContent);
+        console.error("SVG Source:", svgText);
+        throw new Error("Invalid SVG document");
+    }
+
+    const svgElement = svgDocument.documentElement;
+
+    if (svgElement.localName !== "svg") {
+        throw new Error("The document root is not an SVG element");
+    }
+
+    return document.importNode(
+        svgElement,
+        true
+    ) as unknown as SVGSVGElement;
+}
+
 export abstract class Character {
     // Members
     /**
@@ -28,6 +68,7 @@ export abstract class Character {
 
         this.animation = this.createIdleAnimation();
     }
+    public abstract loadAllData(): Promise<void>;
     // Animation controllers
     /**
      * Start animation. if new animation given, start the new animation.

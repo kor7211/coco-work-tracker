@@ -1,6 +1,11 @@
-import { Character, type Animation } from "./character.ts";
+import { Character, type Animation, loadSVG } from "./character.ts";
 
 export class Navi extends Character {
+    public body: SVGSVGElement | false  = false;
+    async loadAllData(): Promise<void> {
+        this.body = await loadSVG("/src/assets/images/navi/navi.svg");
+    }
+
     public override createIdleAnimation(): Animation {
         return new IdleAnimation(this);
     }
@@ -13,18 +18,9 @@ class IdleAnimation implements Animation {
     }
 
     initialize(): void {
-        const head = document.createElementNS(
-            Character.SVG_NS,
-            "g"
-        );
-
-        const circle = document.createElementNS(
-            Character.SVG_NS,
-            "circle"
-        )
-        circle.setAttribute("r", "30");
-
-        this.character.svg.append(circle);
+        if (this.character.body) {
+            this.character.svg = this.character.body;
+        }
     }
 
     update(elapsed: number, totalTime: number): void {

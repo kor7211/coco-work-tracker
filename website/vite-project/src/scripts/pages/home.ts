@@ -7,6 +7,7 @@ import "../components/i18n_button.ts";
 import { Navi } from "../animations/navi.ts";
 
 const navi = new Navi();
+await navi.loadAllData();
 navi.startAnimation(navi.createIdleAnimation());
 const wind: HTMLElement = document.getElementById("character-window") as HTMLElement;
 wind.append(navi.svg);
